@@ -1,9 +1,6 @@
 package com.akthon.SunSka.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.Set;
@@ -18,6 +15,7 @@ public class Event {
 
     private Date endDate;
 
+    @Column(name = "\"year\"")
     private Integer year;
 
     @OneToMany(mappedBy = "event")

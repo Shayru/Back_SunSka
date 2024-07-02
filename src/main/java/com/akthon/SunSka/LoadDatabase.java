@@ -1,5 +1,7 @@
 package com.akthon.SunSka;
 
+import com.akthon.SunSka.model.User;
+import com.akthon.SunSka.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,8 +18,8 @@ class LoadDatabase {
     CommandLineRunner initDatabase(UserRepository repository) {
 
         return args -> {
-            log.info("Preloading " + repository.save(new AppUser("Admin", "admin")));
-            log.info("Preloading " + repository.save(new AppUser("User", "user")));
+            log.info("Preloading " + repository.save(new User()));
+            log.info("Preloading " + repository.save(new User()));
         };
     }
 

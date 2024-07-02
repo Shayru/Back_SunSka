@@ -6,11 +6,13 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(name = "\"order\"")
 public class Order {
 
     private @Id
     @GeneratedValue Long id;
 
+    @Column(name = "\"date\"")
     private Date date;
 
     private String status;
