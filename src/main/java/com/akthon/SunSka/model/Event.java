@@ -3,8 +3,10 @@ package com.akthon.SunSka.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Event {
@@ -18,15 +20,30 @@ public class Event {
 
     private Integer year;
 
+    @OneToMany(mappedBy = "event")
+    private Set<Sales> sales;
+
+    @OneToMany(mappedBy = "event")
+    private Set<Stock> stocks;
+
 
     public Event() {
     }
 
-    public Event(Long id, Date startDate, Date endDate, Integer year) {
+    public Event(
+            Long id,
+            Date startDate,
+            Date endDate,
+            Integer year,
+            Set<Sales> sales,
+            Set<Stock> stocks
+    ) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.year = year;
+        this.sales = sales;
+        this.stocks = stocks;
     }
 
 
@@ -60,5 +77,21 @@ public class Event {
 
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    public Set<Sales> getSales() {
+        return sales;
+    }
+
+    public void setSales(Set<Sales> sales) {
+        this.sales = sales;
+    }
+
+    public Set<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(Set<Stock> stocks) {
+        this.stocks = stocks;
     }
 }

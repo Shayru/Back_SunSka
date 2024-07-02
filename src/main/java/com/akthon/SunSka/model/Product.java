@@ -1,10 +1,9 @@
 package com.akthon.SunSka.model;
 
 import java.util.Objects;
+import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 class Product {
@@ -18,21 +17,46 @@ class Product {
 
     private String unit;
 
+    @Column()
     private String unitCase;
 
-    public Product() {}
+    @OneToMany(mappedBy = "product")
+    private Set<Stock> stocks;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private ProductCategory category;
+
+    @ManyToOne
+    @JoinColumn(name = "partner_id")
+    private Partner partner;
+
+    @OneToMany(mappedBy = "product")
+    private Set<Sales> sales;
+
+
+    public Product() {
+    }
 
     public Product(
             String name,
             Integer capacity,
             String unit,
-            String unitCase
-            ) {
+            String unitCase,
+            Set<Stock> stocks,
+            ProductCategory category,
+            Partner partner,
+            Set<Sales> sales
+    ) {
 
         this.name = name;
         this.capacity = capacity;
         this.unit = unit;
         this.unitCase = unitCase;
+        this.stocks = stocks;
+        this.category = category;
+        this.partner = partner;
+        this.sales = sales;
     }
 
     public Long getId() {
@@ -73,5 +97,37 @@ class Product {
 
     public void setUnitCase(String unitCase) {
         this.unitCase = unitCase;
+    }
+
+    public Set<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(Set<Stock> stocks) {
+        this.stocks = stocks;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
+    }
+
+    public Partner getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Partner partner) {
+        this.partner = partner;
+    }
+
+    public Set<Sales> getSales() {
+        return sales;
+    }
+
+    public void setSales(Set<Sales> sales) {
+        this.sales = sales;
     }
 }

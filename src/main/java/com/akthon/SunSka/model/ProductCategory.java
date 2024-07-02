@@ -3,6 +3,9 @@ package com.akthon.SunSka.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+import java.util.Set;
 
 @Entity
 public class ProductCategory {
@@ -13,11 +16,20 @@ public class ProductCategory {
 
     private String name;
 
-    public ProductCategory() {}
+    @OneToMany(mappedBy = "category")
+    private Set<Product> products;
 
-    public ProductCategory(Long id, String name) {
+    public ProductCategory() {
+    }
+
+    public ProductCategory(
+            Long id,
+            String name,
+            Set<Product> products
+    ) {
         this.id = id;
         this.name = name;
+        this.products = products;
     }
 
     public Long getId() {
@@ -34,5 +46,13 @@ public class ProductCategory {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

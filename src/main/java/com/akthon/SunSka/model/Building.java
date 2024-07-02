@@ -1,9 +1,9 @@
 package com.akthon.SunSka.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 class Building {
@@ -15,13 +15,29 @@ class Building {
 
     private String type;
 
-    public Building () {}
+    @OneToMany(mappedBy = "building")
+    private Set<Stock> stocks;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Building() {
+    }
 
 
-    public Building(Long id, String name, String type) {
+    public Building(
+            Long id,
+            String name,
+            String type,
+            Set<Stock> stocks,
+            User user
+    ) {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.stocks = stocks;
+        this.user = user;
     }
 
 
@@ -49,4 +65,19 @@ class Building {
         this.type = type;
     }
 
+    public Set<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(Set<Stock> stocks) {
+        this.stocks = stocks;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

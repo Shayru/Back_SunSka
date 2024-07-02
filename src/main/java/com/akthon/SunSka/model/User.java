@@ -1,8 +1,8 @@
 package com.akthon.SunSka.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 public class User {
@@ -15,18 +15,42 @@ public class User {
     private String password;
 
     private Boolean admin;
-
     private String role;
+
+    @Column()
     private String name;
 
-    public User() {}
+    @OneToMany(mappedBy = "user")
+    private Set<Building> buildings;
 
-    public User(String login, String password, Boolean admin, String role, String name) {
+    @OneToMany(mappedBy = "user")
+    private Set<Sales> sales;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders;
+
+
+    public User() {
+    }
+
+    public User(
+            String login,
+            String password,
+            Boolean admin,
+            String role,
+            String name,
+            Set<Building> buildings,
+            Set<Sales> sales,
+            Set<Order> orders
+    ) {
         this.login = login;
         this.password = password;
         this.admin = admin;
         this.role = role;
         this.name = name;
+        this.buildings = buildings;
+        this.sales = sales;
+        this.orders = orders;
     }
 
     public Long getId() {
@@ -71,5 +95,33 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<Building> getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(Set<Building> buildings) {
+        this.buildings = buildings;
+    }
+
+    public Set<Sales> getSales() {
+        return sales;
+    }
+
+    public void setSales(Set<Sales> sales) {
+        this.sales = sales;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }
