@@ -1,8 +1,7 @@
 package com.akthon.SunSka.repository;
 
-import org.springframework.stereotype.Repository;
+import com.akthon.SunSka.model.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class OrderRepository {
 
-}
+public interface OrderRepository extends JpaRepository<Order, Long> {}

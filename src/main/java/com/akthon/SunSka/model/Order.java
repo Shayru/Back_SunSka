@@ -19,6 +19,8 @@ public class Order {
 
     private Integer nbRestock;
 
+    private Date dateRestock;
+
     @ManyToMany(mappedBy = "orders")
     private Set<Stock> stocks;
 
@@ -34,6 +36,7 @@ public class Order {
             Date date,
             String status,
             Integer nbRestock,
+            Date dateRestock,
             Set<Stock> stocks,
             User user
     ) {
@@ -41,6 +44,7 @@ public class Order {
         this.date = date;
         this.status = status;
         this.nbRestock = nbRestock;
+        this.dateRestock = dateRestock;
         this.stocks = stocks;
         this.user = user;
     }
@@ -75,6 +79,14 @@ public class Order {
 
     public void setNbRestock(Integer nbRestock) {
         this.nbRestock = nbRestock;
+    }
+
+    public Date getDateRestock() {
+        return dateRestock;
+    }
+
+    public void setDateRestock(Date dateRestock) {
+        this.dateRestock = dateRestock;
     }
 
     public Set<Stock> getStocks() {
