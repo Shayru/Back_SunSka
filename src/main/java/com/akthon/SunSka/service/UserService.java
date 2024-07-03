@@ -26,7 +26,9 @@ public class UserService {
 
     public User createUser(User user) {
         String plainPassword = user.getPassword();
+        System.out.println("plainPassword: " + plainPassword);
         String hashedPassword = passwordHasherService.hashPassword(plainPassword);
+        System.out.println("hashedPassword: " + hashedPassword);
         user.setPassword(hashedPassword);
         return userRepository.save(user);
     }
