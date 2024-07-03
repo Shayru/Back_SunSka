@@ -44,4 +44,6 @@ public class StockController {
         return stockService.findStockInAlertForBarAndYear(bar, year);
     }
 
+
+    // TODO GET stock by building
 }

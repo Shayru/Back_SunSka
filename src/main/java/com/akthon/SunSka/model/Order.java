@@ -22,9 +22,12 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private Set<StockOrder> stockOrders;
 
+    // TODO enlever l'user qui ne sert plus et dans les fonction de crea/update
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    //TODO Ajouter le bar concerné par la commande
 
     public Order() {
     }

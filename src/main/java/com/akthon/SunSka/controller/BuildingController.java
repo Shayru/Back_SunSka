@@ -47,6 +47,8 @@ public class BuildingController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    //TODO  Faire le remove user from building
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBuilding(@PathVariable Long id) {
         boolean isDeleted = buildingService.deleteBuilding(id);

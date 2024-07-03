@@ -44,6 +44,7 @@ public class UserController {
         return userService.updateUserPassword(id, userData);
     }
 
+    //TODO  enlever le delete et faire un archivage à la place (RAJOUTER ISARCHIVE A USER)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteuser(@PathVariable Long id) {
         boolean isDeleted = userService.deleteUser(id);

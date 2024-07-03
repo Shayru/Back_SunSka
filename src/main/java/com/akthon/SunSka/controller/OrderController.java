@@ -30,6 +30,7 @@ public class OrderController {
 
     @PostMapping
     public Order createOrder(@RequestBody Order order) {
+        // TODO  faire la gestion du stockOrder
         return orderService.createOrder(order);
     }
 
@@ -39,4 +40,17 @@ public class OrderController {
         return updatedOrder.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    //TODO Recup les commandes ayant du stock d'un bar
+    //TODO Faire la validation de la commande et la modif dans le stock
+
+    //TODO Recup les commandes de tous les bar
+
+    //PARTIE HISTORIQUE
+    //TODO get toutes les commandes d'un bar
+    //TODO get toutes les commandes d'un produit
+    //TODO get toutes les commandes d'un type de produit
+    //....
+
+
 }
