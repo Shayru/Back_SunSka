@@ -27,9 +27,10 @@ public class SecurityConfig {
                         .requestMatchers("/events/**").permitAll()
                         .requestMatchers("/partners/**").permitAll()
                         .requestMatchers("/orders/**").permitAll()
+                        .requestMatchers("/stock/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+//                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .logout(LogoutConfigurer::permitAll);
 
         return http.build();

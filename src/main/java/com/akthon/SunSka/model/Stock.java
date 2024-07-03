@@ -1,30 +1,44 @@
 package com.akthon.SunSka.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.Set;
 
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Stock {
 
-    private @Id
-    @GeneratedValue Long id;
+    @Id
+    @GeneratedValue
+    private  Long id;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonBackReference
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "building_id")
+    @JsonBackReference
     private Building building;
 
     @OneToMany(mappedBy = "stock")
+    @JsonManagedReference
     private Set<StockOrder> stockOrders;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
+    @JsonBackReference
     private Event event;
 
     @OneToMany(mappedBy = "stock")
+    @JsonManagedReference
     private Set<Sales> sales;
 
     private Integer initialStock;
