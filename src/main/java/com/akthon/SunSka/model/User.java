@@ -20,7 +20,10 @@ public class User {
     @Column()
     private String name;
 
-    @OneToMany(mappedBy = "user")
+    @ManyToMany
+    @JoinTable(name = "user_building",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "building_id"))
     private Set<Building> buildings;
 
     @OneToMany(mappedBy = "user")

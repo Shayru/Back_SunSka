@@ -29,8 +29,8 @@ public class BuildingService {
 
     public Optional<Building> updateBuilding(Long id, BuildingDTO buildingDTO) {
         return buildingRepository.findById(id).map(existingBuilding -> {
-            existingBuilding.setName(buildingDTO.getName());
-            existingBuilding.setType(buildingDTO.getType());
+            existingBuilding.setName(buildingDTO.name);
+            existingBuilding.setType(buildingDTO.type);
             return buildingRepository.save(existingBuilding);
         });
     }
