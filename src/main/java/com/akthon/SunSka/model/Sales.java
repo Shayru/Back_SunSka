@@ -22,8 +22,8 @@ public class Sales {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @JoinColumn(name = "stock_id")
+    private Stock stock;
 
 
     public Sales() {
@@ -35,14 +35,14 @@ public class Sales {
             Integer nbSold,
             User user,
             Product product,
-            Event event
+            Stock stock
     ) {
         this.id = id;
         this.date = date;
         this.nbSold = nbSold;
         this.user = user;
         this.product = product;
-        this.event = event;
+        this.stock = stock;
     }
 
     public Date getDate() {
@@ -85,11 +85,11 @@ public class Sales {
         this.product = product;
     }
 
-    public Event getEvent() {
-        return event;
+    public Stock getStock() {
+        return stock;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }

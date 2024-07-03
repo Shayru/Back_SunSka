@@ -27,6 +27,9 @@ public class Stock {
     @JoinColumn(name = "event_id")
     private Event event;
 
+    @OneToMany(mappedBy = "stock")
+    private Set<Sales> sales;
+
     private Integer initialStock;
 
     private Integer currentStock;
@@ -44,7 +47,8 @@ public class Stock {
             Event event,
             Integer initialStock,
             Integer currentStock,
-            Integer warningAlert
+            Integer warningAlert,
+            Set<Sales> sales
     ) {
         this.id = id;
         this.product = product;
@@ -54,6 +58,7 @@ public class Stock {
         this.initialStock = initialStock;
         this.currentStock = currentStock;
         this.warningAlert = warningAlert;
+        this.sales = sales;
     }
 
 
