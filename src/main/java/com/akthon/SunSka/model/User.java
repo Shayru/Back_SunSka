@@ -16,7 +16,6 @@ public class User {
     private String password;
 
     private Boolean admin;
-    private String role;
 
     @Column()
     private String name;
@@ -38,7 +37,6 @@ public class User {
             String login,
             String password,
             Boolean admin,
-            String role,
             String name,
             Set<Building> buildings,
             Set<Sales> sales,
@@ -47,7 +45,6 @@ public class User {
         this.login = login;
         this.password = password;
         this.admin = admin;
-        this.role = role;
         this.name = name;
         this.buildings = buildings;
         this.sales = sales;
@@ -80,14 +77,6 @@ public class User {
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
-    }
-
-    public String getRole() {
-        return this.role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getName() {
