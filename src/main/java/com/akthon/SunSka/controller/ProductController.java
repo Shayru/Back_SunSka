@@ -1,6 +1,6 @@
 package com.akthon.SunSka.controller;
 
-import com.akthon.SunSka.DTO.ProductDTO;
+import com.akthon.SunSka.DTO.ProductUpdateDTO;
 import com.akthon.SunSka.model.Product;
 import com.akthon.SunSka.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
-        Optional<Product> updatedProduct = productService.updateProduct(id, productDTO);
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductUpdateDTO productUpdateDTO) {
+        Optional<Product> updatedProduct = productService.updateProduct(id, productUpdateDTO);
         return updatedProduct.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

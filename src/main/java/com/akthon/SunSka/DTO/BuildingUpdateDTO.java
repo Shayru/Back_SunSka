@@ -1,8 +1,6 @@
 package com.akthon.SunSka.DTO;
 
-import jakarta.persistence.Entity;
-
-public class BuildingDTO {
+public class BuildingUpdateDTO {
 
     public String name;
     public String type;

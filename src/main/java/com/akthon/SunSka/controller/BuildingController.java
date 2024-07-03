@@ -1,8 +1,7 @@
 package com.akthon.SunSka.controller;
 
-import com.akthon.SunSka.DTO.BuildingDTO;
+import com.akthon.SunSka.DTO.BuildingUpdateDTO;
 import com.akthon.SunSka.model.Building;
-import com.akthon.SunSka.model.User;
 import com.akthon.SunSka.service.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +34,8 @@ public class BuildingController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Building> updateBuilding(@PathVariable Long id, @RequestBody BuildingDTO buildingDTO) {
-        Optional<Building> updatedBuilding = buildingService.updateBuilding(id, buildingDTO);
+    public ResponseEntity<Building> updateBuilding(@PathVariable Long id, @RequestBody BuildingUpdateDTO buildingData) {
+        Optional<Building> updatedBuilding = buildingService.updateBuilding(id, buildingData);
         return updatedBuilding.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

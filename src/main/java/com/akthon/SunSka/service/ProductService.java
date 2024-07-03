@@ -1,13 +1,10 @@
 package com.akthon.SunSka.service;
 
-import com.akthon.SunSka.DTO.ProductDTO;
+import com.akthon.SunSka.DTO.ProductUpdateDTO;
 import com.akthon.SunSka.model.Product;
 import com.akthon.SunSka.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,12 +27,12 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Optional<Product> updateProduct(Long id, ProductDTO productDTO) {
+    public Optional<Product> updateProduct(Long id, ProductUpdateDTO productData) {
         return productRepository.findById(id).map(existingProduct -> {
-            existingProduct.setName(productDTO.getName());
-            existingProduct.setCapacity(productDTO.getCapacity());
-            existingProduct.setUnit(productDTO.getUnit());
-            existingProduct.setUnitCase(productDTO.getUnitCase());
+            existingProduct.setName(productData.name);
+            existingProduct.setCapacity(productData.capacity);
+            existingProduct.setUnit(productData.unit);
+            existingProduct.setUnitCase(productData.unitCase);
             return productRepository.save(existingProduct);
         });
     }

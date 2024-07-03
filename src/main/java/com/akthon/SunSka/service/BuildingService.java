@@ -1,6 +1,6 @@
 package com.akthon.SunSka.service;
 
-import com.akthon.SunSka.DTO.BuildingDTO;
+import com.akthon.SunSka.DTO.BuildingUpdateDTO;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.User;
 import com.akthon.SunSka.repository.BuildingRepository;
@@ -31,10 +31,10 @@ public class BuildingService {
         return buildingRepository.save(building);
     }
 
-    public Optional<Building> updateBuilding(Long id, BuildingDTO buildingDTO) {
+    public Optional<Building> updateBuilding(Long id, BuildingUpdateDTO buildingData) {
         return buildingRepository.findById(id).map(existingBuilding -> {
-            existingBuilding.setName(buildingDTO.name);
-            existingBuilding.setType(buildingDTO.type);
+            existingBuilding.setName(buildingData.name);
+            existingBuilding.setType(buildingData.type);
             return buildingRepository.save(existingBuilding);
         });
     }

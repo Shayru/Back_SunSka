@@ -1,6 +1,6 @@
 package com.akthon.SunSka.service;
 
-import com.akthon.SunSka.DTO.OrderDTO;
+import com.akthon.SunSka.DTO.OrderUpdateDTO;
 import com.akthon.SunSka.model.Order;
 import com.akthon.SunSka.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +27,10 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public Optional<Order> updateOrderStatus(Long id, OrderDTO orderDTO) {
+    public Optional<Order> updateOrderStatus(Long id, OrderUpdateDTO orderData) {
         return orderRepository.findById(id).map(existingOrder -> {
-            existingOrder.setStatus(orderDTO.getStatus());
-            existingOrder.setDateRestock(orderDTO.getDateRestock());
+            existingOrder.setStatus(orderData.status);
+            existingOrder.setDateRestock(orderData.dateRestock);
             return orderRepository.save(existingOrder);
         });
     }

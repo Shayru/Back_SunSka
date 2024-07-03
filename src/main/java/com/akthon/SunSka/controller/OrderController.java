@@ -1,11 +1,10 @@
 package com.akthon.SunSka.controller;
 
-import com.akthon.SunSka.DTO.OrderDTO;
+import com.akthon.SunSka.DTO.OrderUpdateDTO;
 import com.akthon.SunSka.model.Order;
 import com.akthon.SunSka.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +34,8 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
-        Optional<Order> updatedOrder = orderService.updateOrderStatus(id, orderDTO);
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestBody OrderUpdateDTO orderData) {
+        Optional<Order> updatedOrder = orderService.updateOrderStatus(id, orderData);
         return updatedOrder.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
