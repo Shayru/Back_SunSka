@@ -1,11 +1,18 @@
 package com.akthon.SunSka.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "\"user\"")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User {
 
     private @Id
@@ -24,7 +31,7 @@ public class User {
     @JoinTable(name = "user_building",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "building_id"))
-    private Set<Building> buildings;
+    private Set<Building> buildings = new HashSet<>();;
 
     @OneToMany(mappedBy = "user")
     private Set<Sales> sales;

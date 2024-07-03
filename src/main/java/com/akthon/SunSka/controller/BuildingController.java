@@ -41,6 +41,13 @@ public class BuildingController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/{buildingId}/users/{userId}")
+    public ResponseEntity<Building> addUserToBuilding(@PathVariable Long buildingId, @PathVariable Long userId) {
+        Optional<Building> updatedBuilding = buildingService.addUserToBuilding(buildingId, userId);
+        return updatedBuilding.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBuilding(@PathVariable Long id) {
         boolean isDeleted = buildingService.deleteBuilding(id);
