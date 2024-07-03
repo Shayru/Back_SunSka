@@ -18,9 +18,8 @@ public class Building {
     @OneToMany(mappedBy = "building")
     private Set<Stock> stocks;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany(mappedBy = "buildings")
+    private Set<User> users;
 
     public Building() {
     }
@@ -31,13 +30,13 @@ public class Building {
             String name,
             String type,
             Set<Stock> stocks,
-            User user
+            Set<User> users
     ) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.stocks = stocks;
-        this.user = user;
+        this.users = users;
     }
 
 
@@ -73,11 +72,11 @@ public class Building {
         this.stocks = stocks;
     }
 
-    public User getUser() {
-        return user;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }
