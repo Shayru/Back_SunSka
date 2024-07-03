@@ -31,9 +31,6 @@ public class Product {
     @JoinColumn(name = "partner_id")
     private Partner partner;
 
-    @OneToMany(mappedBy = "product")
-    private Set<Sales> sales;
-
 
     public Product() {
     }
@@ -45,8 +42,7 @@ public class Product {
             String unitCase,
             Set<Stock> stocks,
             ProductCategory category,
-            Partner partner,
-            Set<Sales> sales
+            Partner partner
     ) {
 
         this.name = name;
@@ -56,7 +52,6 @@ public class Product {
         this.stocks = stocks;
         this.category = category;
         this.partner = partner;
-        this.sales = sales;
     }
 
     public Long getId() {
@@ -121,13 +116,5 @@ public class Product {
 
     public void setPartner(Partner partner) {
         this.partner = partner;
-    }
-
-    public Set<Sales> getSales() {
-        return sales;
-    }
-
-    public void setSales(Set<Sales> sales) {
-        this.sales = sales;
     }
 }

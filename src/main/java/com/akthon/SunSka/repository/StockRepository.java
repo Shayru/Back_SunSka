@@ -1,8 +1,10 @@
 package com.akthon.SunSka.repository;
 
+import com.akthon.SunSka.model.Sales;
+import com.akthon.SunSka.model.Stock;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class StockRepository {
+public interface StockRepository extends JpaRepository<Stock, Long> {
     
 }
