@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-class Building {
+public class Building {
 
     private @Id
     @GeneratedValue Long id;
