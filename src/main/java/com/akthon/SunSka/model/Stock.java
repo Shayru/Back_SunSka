@@ -17,11 +17,8 @@ public class Stock {
     @JoinColumn(name = "building_id")
     private Building building;
 
-    @ManyToMany
-    @JoinTable(name = "stock_order",
-            joinColumns = @JoinColumn(name = "stock_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private Set<Order> orders;
+    @OneToMany(mappedBy = "stock")
+    private Set<StockOrder> stockOrders;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
@@ -43,7 +40,7 @@ public class Stock {
             Long id,
             Product product,
             Building building,
-            Set<Order> orders,
+            Set<StockOrder> stockOrders,
             Event event,
             Integer initialStock,
             Integer currentStock,
@@ -53,7 +50,7 @@ public class Stock {
         this.id = id;
         this.product = product;
         this.building = building;
-        this.orders = orders;
+        this.stockOrders = stockOrders;
         this.event = event;
         this.initialStock = initialStock;
         this.currentStock = currentStock;
@@ -110,12 +107,12 @@ public class Stock {
         this.building = building;
     }
 
-    public Set<Order> getOrders() {
-        return orders;
+    public Set<StockOrder> getStockOrders() {
+        return stockOrders;
     }
 
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
+    public void setStockOrders(Set<StockOrder> stockOrders) {
+        this.stockOrders = stockOrders;
     }
 
     public Event getEvent() {

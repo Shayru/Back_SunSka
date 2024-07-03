@@ -21,8 +21,8 @@ public class Order {
 
     private Date dateRestock;
 
-    @ManyToMany(mappedBy = "orders")
-    private Set<Stock> stocks;
+    @OneToMany(mappedBy = "order")
+    private Set<StockOrder> stockOrders;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -37,7 +37,7 @@ public class Order {
             String status,
             Integer nbRestock,
             Date dateRestock,
-            Set<Stock> stocks,
+            Set<StockOrder> stockOrders,
             User user
     ) {
         this.id = id;
@@ -45,7 +45,7 @@ public class Order {
         this.status = status;
         this.nbRestock = nbRestock;
         this.dateRestock = dateRestock;
-        this.stocks = stocks;
+        this.stockOrders = stockOrders;
         this.user = user;
     }
 
@@ -89,12 +89,12 @@ public class Order {
         this.dateRestock = dateRestock;
     }
 
-    public Set<Stock> getStocks() {
-        return stocks;
+    public Set<StockOrder> getStockOrders() {
+        return stockOrders;
     }
 
-    public void setStocks(Set<Stock> stocks) {
-        this.stocks = stocks;
+    public void setStockOrders(Set<StockOrder> stockOrders) {
+        this.stockOrders = stockOrders;
     }
 
     public User getUser() {
