@@ -1,8 +1,10 @@
 package com.akthon.SunSka.repository;
 
-import org.springframework.stereotype.Repository;
+import com.akthon.SunSka.model.Product;
+import com.akthon.SunSka.model.ProductCategory;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class ProductCategoryRepository {
-    
+public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long> {
+
 }
+
