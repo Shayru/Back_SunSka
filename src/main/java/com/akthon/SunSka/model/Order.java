@@ -17,8 +17,6 @@ public class Order {
 
     private String status;
 
-    private Integer nbRestock;
-
     private Date dateRestock;
 
     @OneToMany(mappedBy = "order")
@@ -35,7 +33,6 @@ public class Order {
             Long id,
             Date date,
             String status,
-            Integer nbRestock,
             Date dateRestock,
             Set<StockOrder> stockOrders,
             User user
@@ -43,7 +40,6 @@ public class Order {
         this.id = id;
         this.date = date;
         this.status = status;
-        this.nbRestock = nbRestock;
         this.dateRestock = dateRestock;
         this.stockOrders = stockOrders;
         this.user = user;
@@ -71,14 +67,6 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Integer getNbRestock() {
-        return nbRestock;
-    }
-
-    public void setNbRestock(Integer nbRestock) {
-        this.nbRestock = nbRestock;
     }
 
     public Date getDateRestock() {
