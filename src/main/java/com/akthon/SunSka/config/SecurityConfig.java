@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/products/**").permitAll()
                         .requestMatchers("/product-category/**").permitAll()
                         .requestMatchers("/events/**").permitAll()
+                        .requestMatchers("/partners/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
