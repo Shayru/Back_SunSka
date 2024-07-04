@@ -33,10 +33,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "building_id"))
     private Set<Building> buildings = new HashSet<>();;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Order> orders;
-
-
     public User() {
     }
 
@@ -46,14 +42,12 @@ public class User {
             Boolean admin,
             String name,
             Set<Building> buildings,
-            Set<Order> orders
     ) {
         this.login = login;
         this.password = password;
         this.admin = admin;
         this.name = name;
         this.buildings = buildings;
-        this.orders = orders;
     }
 
     public Long getId() {
@@ -102,13 +96,5 @@ public class User {
 
     public void setBuildings(Set<Building> buildings) {
         this.buildings = buildings;
-    }
-
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
     }
 }
