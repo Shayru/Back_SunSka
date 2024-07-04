@@ -42,6 +42,6 @@ public class OrderService {
 
     public List<Long> getOrdersWithStockByBar(Long barId) {
         Optional<Building> bar = this.buildingRepository.findById(barId);
-        return bar.map(building -> orderRepository.findByBuilding(building.getId())).orElse(null);
+        return bar.map(building -> orderRepository.findByBar(building.getId())).orElse(null);
     }
 }
