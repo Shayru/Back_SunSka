@@ -49,7 +49,7 @@ public class UserController {
         return userService.archiveUser(id);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginDTO loginData) {
         return userService.login(loginData);
     }
