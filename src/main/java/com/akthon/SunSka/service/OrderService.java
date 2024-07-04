@@ -3,6 +3,7 @@ package com.akthon.SunSka.service;
 import com.akthon.SunSka.DTO.OrderCreateDTO;
 import com.akthon.SunSka.DTO.OrderUpdateDTO;
 import com.akthon.SunSka.DTO.OrderWithTypeCreateDTO;
+import com.akthon.SunSka.DTO.ProductSalesDTO;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.Order;
 import com.akthon.SunSka.model.Stock;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -90,5 +92,29 @@ public class OrderService {
 
     public List<Order> getOrdersByBuildingAndType(Long buildingId, Order.OrderType type) {
         return orderRepository.findByBuildingIdAndType(buildingId, type);
+    }
+
+    public ProductSalesDTO getSalesByProductId(Long productId) {
+        List<Order> orders = orderRepository.findAll();
+
+        List<ProductSalesDTO.SaleDetail> saleDetails = orders.stream()
+                .filter(order -> order.getType() == Order.OrderType.SALE)
+                .flatMap(order -> order.getStockOrders().stream()
+                        .filter(stockOrder -> stockOrder.getStock().getProduct().getId().equals(productId))
+                        .map(stockOrder -> {
+                            ProductSalesDTO.SaleDetail saleDetail = new ProductSalesDTO.SaleDetail();
+                            saleDetail.setOrderId(order.getId());
+                            saleDetail.setSaleDate(order.getCreatedAt());
+                            saleDetail.setQuantity(stockOrder.getQuantity());
+                            return saleDetail;
+                        }))
+                .collect(Collectors.toList());
+
+        // Construct ProductSalesDTO
+        ProductSalesDTO productSalesDTO = new ProductSalesDTO();
+        productSalesDTO.setProductId(productId);
+        productSalesDTO.setSales(saleDetails);
+
+        return productSalesDTO;
     }
 }

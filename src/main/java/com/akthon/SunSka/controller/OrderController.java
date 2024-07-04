@@ -3,6 +3,7 @@ package com.akthon.SunSka.controller;
 import com.akthon.SunSka.DTO.OrderCreateDTO;
 import com.akthon.SunSka.DTO.OrderUpdateDTO;
 import com.akthon.SunSka.DTO.OrderWithTypeCreateDTO;
+import com.akthon.SunSka.DTO.ProductSalesDTO;
 import com.akthon.SunSka.model.Order;
 import com.akthon.SunSka.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +64,18 @@ public class OrderController {
     //PARTIE HISTORIQUE
     //TODO get toutes les ventes d'un bar
     @GetMapping("/building/{buildingId}")
-    public List<Order> getOrdersByBuildingAndType(@PathVariable Long buildingId) {
+    public List<Order> getSalesByBuilding(@PathVariable Long buildingId) {
         return orderService.getOrdersByBuildingAndType(buildingId, Order.OrderType.SALE);
     }
     //TODO get toutes les ventes d'un produit
+    @GetMapping("/sales/product/{productId}")
+    public ResponseEntity<ProductSalesDTO> getSalesByProductId(@PathVariable Long productId) {
+        ProductSalesDTO productSalesDTO = orderService.getSalesByProductId(productId);
+
+
+        return ResponseEntity.ok(productSalesDTO);
+    }
+
     //TODO get toutes les ventes d'un type de produit
     //....
 
