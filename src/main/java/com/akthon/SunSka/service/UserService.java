@@ -1,7 +1,7 @@
 package com.akthon.SunSka.service;
 
-import com.akthon.SunSka.DTO.UserUpdateDTO;
-import com.akthon.SunSka.DTO.UserUpdatePasswordDTO;
+import com.akthon.SunSka.DTO.*;
+import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.User;
 import com.akthon.SunSka.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -26,10 +27,14 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User createUser(User user) {
-        String plainPassword = user.getPassword();
+    public User createUser(UserCreateDTO userData) {
+        if(userRepository.findByLogin(userData.login).isPresent()) {
+            return null;
+        }
+
+        String plainPassword = userData.password;
         String hashedPassword = passwordHasherService.hashPassword(plainPassword);
-        user.setPassword(hashedPassword);
+        User user = new User(userData.login, hashedPassword, userData.admin, userData.name);
         return userRepository.save(user);
     }
 
@@ -56,5 +61,34 @@ public class UserService {
             userRepository.delete(user);
             return true;
         }).orElse(false);
+    }
+
+    public Optional<User> archiveUser(Long id) {
+        return this.userRepository.findById(id).map(existingUser -> {
+            existingUser.changeArchived();
+            return userRepository.save(existingUser);
+        });
+    }
+
+    public LoginResponseDTO login(LoginDTO loginData) {
+        Optional<User> user = userRepository.findByLogin(loginData.login);
+        if (user.isPresent() && passwordHasherService.verifyPassword(loginData.password, user.get().getPassword())) {
+            User u = user.get();
+            LoginResponseDTO responseDTO = new LoginResponseDTO(u.getId(), u.getName(), u.getLogin());
+            return responseDTO;
+        }
+        return new LoginResponseDTO();
+    }
+
+    public Boolean isUserGlobalAdmin(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            Set<Building> buildings = user.get().getBuildings();
+            // L'user est admin global s'il gère plus d'un building
+            if(buildings.size() > 1) {
+                return true;
+            }
+        }
+        return false;
     }
 }

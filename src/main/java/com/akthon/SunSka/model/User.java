@@ -24,6 +24,8 @@ public class User {
 
     private Boolean admin;
 
+    private Boolean isArchived;
+
     @Column()
     private String name;
 
@@ -40,14 +42,14 @@ public class User {
             String login,
             String password,
             Boolean admin,
-            String name,
-            Set<Building> buildings
+            String name
     ) {
         this.login = login;
         this.password = password;
         this.admin = admin;
         this.name = name;
-        this.buildings = buildings;
+        this.buildings = new HashSet<>();
+        this.isArchived = false;
     }
 
     public Long getId() {
@@ -96,5 +98,9 @@ public class User {
 
     public void setBuildings(Set<Building> buildings) {
         this.buildings = buildings;
+    }
+
+    public void changeArchived(){
+        this.isArchived = !this.isArchived;
     }
 }

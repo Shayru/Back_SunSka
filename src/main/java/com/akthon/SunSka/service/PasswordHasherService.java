@@ -15,4 +15,8 @@ public class PasswordHasherService {
     public String hashPassword(String plainPassword) {
         return passwordEncoder.encode(plainPassword);
     }
+
+    public boolean verifyPassword(String plainPassword, String encodedPassword) {
+        return passwordEncoder.matches(plainPassword, encodedPassword);
+    }
 }
