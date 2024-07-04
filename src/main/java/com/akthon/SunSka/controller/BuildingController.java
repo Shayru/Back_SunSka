@@ -58,4 +58,7 @@ public class BuildingController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    //TODO Faire une demande pour vérif si un utilisateur est dans le building
+    //TODO Faire une demande pour vérif si un utilisateur est dans le building et est admin de celui ci
 }

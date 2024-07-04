@@ -1,7 +1,7 @@
 package com.akthon.SunSka.controller;
 
-import com.akthon.SunSka.DTO.UserUpdateDTO;
-import com.akthon.SunSka.DTO.UserUpdatePasswordDTO;
+import com.akthon.SunSka.DTO.*;
+import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.User;
 import com.akthon.SunSka.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,8 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public User createUser(@RequestBody UserCreateDTO userData) {
+        return userService.createUser(userData);
     }
 
     @PutMapping("/{id}")
@@ -44,16 +44,23 @@ public class UserController {
         return userService.updateUserPassword(id, userData);
     }
 
-    //TODO  enlever le delete et faire un archivage à la place (RAJOUTER ISARCHIVE A USER)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteuser(@PathVariable Long id) {
-        boolean isDeleted = userService.deleteUser(id);
-        if (isDeleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/{id}/archive")
+    public Optional<User> archiveUser(@PathVariable Long id) {
+        return userService.archiveUser(id);
     }
 
-    //todo add method login for user
+    @GetMapping("/login")
+    public LoginResponseDTO login(@RequestBody LoginDTO loginData) {
+        return userService.login(loginData);
+    }
+
+
+    @GetMapping("/{id}/admin/global")
+    public Boolean isUserGlobalAdmin(Long id) {
+        return userService.isUserGlobalAdmin(id);
+    }
+
+
+    // TODO get all bars for a specific user
+    // TODO get all admin bars for a specific user ?
 }
