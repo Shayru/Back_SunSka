@@ -156,7 +156,6 @@ public class OrderService {
                 stockRepository.save(stock);
             });
         } else if (orderType == Order.OrderType.ORDER) {
-            // TODO faire + qtt bar et - qtt magasin
             order.getStockOrders().forEach(stockOrder -> {
                 Stock stock = stockOrder.getStock();
                 stock.setCurrentStock(stock.getCurrentStock() + stockOrder.getQuantity());
