@@ -41,10 +41,16 @@ public class OrderController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //TODO Recup les commandes ayant du stock d'un bar
+    @GetMapping("/bar/{barId}")
+    public List<Long> getOrdersWithStockByBar(@PathVariable Long barId) {
+        return orderService.getOrdersWithStockByBar(barId);
+    }
+
+
     //TODO Faire la validation de la commande et la modif dans le stock
 
     //TODO Recup les commandes de tous les bar
+
 
     //PARTIE HISTORIQUE
     //TODO get toutes les commandes d'un bar

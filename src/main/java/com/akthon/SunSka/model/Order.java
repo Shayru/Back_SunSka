@@ -28,6 +28,9 @@ public class Order {
     private User user;
 
     //TODO Ajouter le bar concerné par la commande
+    @ManyToOne
+    @JoinColumn(name = "building_id")
+    private Building building;
 
     public Order() {
     }
@@ -38,7 +41,8 @@ public class Order {
             String status,
             Date dateRestock,
             Set<StockOrder> stockOrders,
-            User user
+            User user,
+            Building building
     ) {
         this.id = id;
         this.date = date;
@@ -46,6 +50,7 @@ public class Order {
         this.dateRestock = dateRestock;
         this.stockOrders = stockOrders;
         this.user = user;
+        this.building = building;
     }
 
     public Long getId() {
@@ -94,5 +99,13 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 }

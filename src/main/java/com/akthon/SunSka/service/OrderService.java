@@ -1,7 +1,9 @@
 package com.akthon.SunSka.service;
 
 import com.akthon.SunSka.DTO.OrderUpdateDTO;
+import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.Order;
+import com.akthon.SunSka.repository.BuildingRepository;
 import com.akthon.SunSka.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private BuildingRepository buildingRepository;
 
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
@@ -33,5 +38,10 @@ public class OrderService {
             existingOrder.setDateRestock(orderData.dateRestock);
             return orderRepository.save(existingOrder);
         });
+    }
+
+    public List<Long> getOrdersWithStockByBar(Long barId) {
+        Optional<Building> bar = this.buildingRepository.findById(barId);
+        return bar.map(building -> orderRepository.findByBuilding(building.getId())).orElse(null);
     }
 }

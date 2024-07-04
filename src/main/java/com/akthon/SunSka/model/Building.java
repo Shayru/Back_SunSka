@@ -28,6 +28,9 @@ public class Building {
     @ManyToMany(mappedBy = "buildings")
     private Set<User> users = new HashSet<>();;
 
+    @OneToMany(mappedBy = "building")
+    private Set<Order> orders;
+
     public Building() {
     }
 
@@ -37,13 +40,15 @@ public class Building {
             String name,
             String type,
             Set<Stock> stocks,
-            Set<User> users
+            Set<User> users,
+            Set<Order> orders
     ) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.stocks = stocks;
         this.users = users;
+        this.orders = orders;
     }
 
 
@@ -85,5 +90,13 @@ public class Building {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 }
