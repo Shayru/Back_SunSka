@@ -37,10 +37,6 @@ public class Stock {
     @JsonBackReference
     private Event event;
 
-    @OneToMany(mappedBy = "stock")
-    @JsonManagedReference
-    private Set<Sales> sales;
-
     private Integer initialStock;
 
     private Integer currentStock;
@@ -51,17 +47,14 @@ public class Stock {
     }
 
     public Stock(
-            Long id,
             Product product,
             Building building,
             Set<StockOrder> stockOrders,
             Event event,
             Integer initialStock,
             Integer currentStock,
-            Integer warningAlert,
-            Set<Sales> sales
+            Integer warningAlert
     ) {
-        this.id = id;
         this.product = product;
         this.building = building;
         this.stockOrders = stockOrders;
@@ -69,7 +62,6 @@ public class Stock {
         this.initialStock = initialStock;
         this.currentStock = currentStock;
         this.warningAlert = warningAlert;
-        this.sales = sales;
     }
 
 

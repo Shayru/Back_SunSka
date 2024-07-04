@@ -9,48 +9,55 @@ import java.util.Set;
 @Table(name = "\"order\"")
 public class Order {
 
+    public enum OrderType {
+        ORDER_TYPE,
+        SALE_TYPE,
+        RESTOCK_TYPE
+    }
+
+    public enum OrderStatus {
+        PENDING,
+        DELIVERED,
+        CANCELLED,
+        CREATED
+    }
+
     private @Id
     @GeneratedValue Long id;
 
     @Column(name = "\"date\"")
     private Date date;
 
-    private String status;
+    private OrderStatus status;
 
     private Date dateRestock;
 
     @OneToMany(mappedBy = "order")
     private Set<StockOrder> stockOrders;
 
-    // TODO enlever l'user qui ne sert plus et dans les fonction de crea/update
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    //TODO Ajouter le bar concerné par la commande
     @ManyToOne
     @JoinColumn(name = "building_id")
     private Building building;
+
+    private OrderType type;
 
     public Order() {
     }
 
     public Order(
-            Long id,
             Date date,
-            String status,
+            OrderStatus status,
             Date dateRestock,
             Set<StockOrder> stockOrders,
-            User user,
-            Building building
+            Building building,
+            OrderType type
     ) {
-        this.id = id;
         this.date = date;
         this.status = status;
         this.dateRestock = dateRestock;
         this.stockOrders = stockOrders;
-        this.user = user;
         this.building = building;
+        this.type = type;
     }
 
     public Long getId() {
@@ -69,14 +76,6 @@ public class Order {
         this.date = date;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Date getDateRestock() {
         return dateRestock;
     }
@@ -93,19 +92,23 @@ public class Order {
         this.stockOrders = stockOrders;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Building getBuilding() {
         return building;
     }
 
     public void setBuilding(Building building) {
         this.building = building;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public OrderType getType() {
+        return type;
+    }
+
+    public void setType(OrderType type) {
+        this.type = type;
     }
 }

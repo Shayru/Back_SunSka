@@ -34,9 +34,6 @@ public class User {
     private Set<Building> buildings = new HashSet<>();;
 
     @OneToMany(mappedBy = "user")
-    private Set<Sales> sales;
-
-    @OneToMany(mappedBy = "user")
     private Set<Order> orders;
 
 
@@ -49,7 +46,6 @@ public class User {
             Boolean admin,
             String name,
             Set<Building> buildings,
-            Set<Sales> sales,
             Set<Order> orders
     ) {
         this.login = login;
@@ -57,7 +53,6 @@ public class User {
         this.admin = admin;
         this.name = name;
         this.buildings = buildings;
-        this.sales = sales;
         this.orders = orders;
     }
 
@@ -107,14 +102,6 @@ public class User {
 
     public void setBuildings(Set<Building> buildings) {
         this.buildings = buildings;
-    }
-
-    public Set<Sales> getSales() {
-        return sales;
-    }
-
-    public void setSales(Set<Sales> sales) {
-        this.sales = sales;
     }
 
     public Set<Order> getOrders() {

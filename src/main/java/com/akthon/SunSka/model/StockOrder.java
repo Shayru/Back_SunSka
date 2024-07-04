@@ -16,14 +16,14 @@ public class StockOrder {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private Integer nbRestock;
+    private Integer quantity;
 
     public StockOrder() {}
 
-    public StockOrder(Stock stock, Order order, Integer nbRestock) {
+    public StockOrder(Stock stock, Order order, Integer quantity) {
         this.stock = stock;
         this.order = order;
-        this.nbRestock = nbRestock;
+        this.quantity = quantity;
     }
 
 
@@ -43,12 +43,12 @@ public class StockOrder {
         this.order = order;
     }
 
-    public Integer getnbRestock() {
-        return nbRestock;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setnbRestock(Integer nbRestock) {
-        this.nbRestock = nbRestock;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }
 
