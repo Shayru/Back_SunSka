@@ -1,7 +1,6 @@
 package com.akthon.SunSka.controller;
 
 import com.akthon.SunSka.DTO.StockCreateDTO;
-import com.akthon.SunSka.model.Event;
 import com.akthon.SunSka.model.Stock;
 import com.akthon.SunSka.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
