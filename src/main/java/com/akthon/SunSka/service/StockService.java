@@ -1,5 +1,6 @@
 package com.akthon.SunSka.service;
 
+import com.akthon.SunSka.DTO.ProductStockDTO;
 import com.akthon.SunSka.DTO.StockCreateDTO;
 import com.akthon.SunSka.DTO.StockResponseDTO;
 import com.akthon.SunSka.model.*;
@@ -8,8 +9,10 @@ import com.akthon.SunSka.repository.EventRepository;
 import com.akthon.SunSka.repository.ProductRepository;
 import com.akthon.SunSka.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,4 +91,30 @@ public class StockService {
     public List<Long> findStockInAlertForBarAndYear(Long idBar, int year) {
         return stockRepository.findStockInAlertForBarAndYear(idBar, year);
     }
+
+//    public List<ProductStockDTO> getBarShopStocks(Long idBar) {
+//        List<ProductStockDTO> result = new ArrayList<>();
+//
+//        // Get all products
+//        List<Product> products = productService.getAllProducts();
+//
+//        // Loop through each product
+//        for (Product product : products) {
+//            ProductStockDTO productStockDTO = new ProductStockDTO();
+//            productStockDTO.setProduct(product);
+//
+//            // Get stock in bars for the current product
+//            List<Stock> barStocks = stockService.getStocksByProductIdAndBuildingType(product.getId(), "bar");
+//            int totalBarStock = barStocks.stream().mapToInt(Stock::getCurrentStock).sum();
+//            productStockDTO.setBarStock(totalBarStock);
+//
+//            // Get stock in shop for the current product
+//            Stock shopStock = stockService.getStockByProductIdAndBuildingId(product.getId(), 1); // Assuming 1 is the shop id
+//            productStockDTO.setShopStock(shopStock != null ? shopStock.getCurrentStock() : 0);
+//
+//            result.add(productStockDTO);
+//        }
+//
+//        return ResponseEntity.ok(result);
+//    }
 }

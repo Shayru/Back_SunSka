@@ -87,8 +87,7 @@ public class UserService {
             BuildingInfoDTO buildingInfo = new BuildingInfoDTO(building.getId(), building.getName(), building.getType());
 
 
-            LoginResponseDTO responseDTO = new LoginResponseDTO(u.getId(), u.getName(), u.getLogin(), role, buildingInfo);
-            return responseDTO;
+            return new LoginResponseDTO(u.getId(), u.getName(), u.getLogin(), role, buildingInfo);
         }
         return new LoginResponseDTO();
     }
