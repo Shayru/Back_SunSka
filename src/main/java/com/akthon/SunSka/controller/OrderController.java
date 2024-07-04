@@ -1,6 +1,8 @@
 package com.akthon.SunSka.controller;
 
+import com.akthon.SunSka.DTO.OrderCreateDTO;
 import com.akthon.SunSka.DTO.OrderUpdateDTO;
+import com.akthon.SunSka.DTO.OrderWithTypeCreateDTO;
 import com.akthon.SunSka.model.Order;
 import com.akthon.SunSka.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,14 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
+    public Order createOrder(@RequestBody OrderCreateDTO orderData) {
+        return orderService.createOrder(orderData);
+    }
+
+    @PostMapping("/type/{type}")
+    public Order createOrderByType(@RequestBody OrderWithTypeCreateDTO orderData) {
         // TODO  faire la gestion du stockOrder
-        return orderService.createOrder(order);
+        return orderService.createOrderWithType(orderData);
     }
 
     @PatchMapping("/{id}")
@@ -53,9 +60,9 @@ public class OrderController {
 
 
     //PARTIE HISTORIQUE
-    //TODO get toutes les commandes d'un bar
-    //TODO get toutes les commandes d'un produit
-    //TODO get toutes les commandes d'un type de produit
+    //TODO get toutes les ventes d'un bar
+    //TODO get toutes les ventes d'un produit
+    //TODO get toutes les ventes d'un type de produit
     //....
 
 

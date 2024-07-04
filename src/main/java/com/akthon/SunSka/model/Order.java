@@ -1,18 +1,24 @@
 package com.akthon.SunSka.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "\"order\"")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Order {
 
     public enum OrderType {
-        ORDER_TYPE,
-        SALE_TYPE,
-        RESTOCK_TYPE
+        ORDER,
+        SALE,
+        RESTOCK
     }
 
     public enum OrderStatus {
@@ -24,16 +30,14 @@ public class Order {
 
     private @Id
     @GeneratedValue Long id;
-
-    @Column(name = "\"date\"")
-    private Date date;
+    private Date createdAt;
 
     private OrderStatus status;
 
-    private Date dateRestock;
+    private Date updatedAt;
 
-    @OneToMany(mappedBy = "order")
-    private Set<StockOrder> stockOrders;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private Set<StockOrder> stockOrders = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "building_id")
@@ -42,19 +46,20 @@ public class Order {
     private OrderType type;
 
     public Order() {
+        this.stockOrders = new HashSet<>();
     }
 
     public Order(
-            Date date,
+            Date createdAt,
             OrderStatus status,
-            Date dateRestock,
+            Date updatedAt,
             Set<StockOrder> stockOrders,
             Building building,
             OrderType type
     ) {
-        this.date = date;
+        this.createdAt = createdAt;
         this.status = status;
-        this.dateRestock = dateRestock;
+        this.updatedAt = updatedAt;
         this.stockOrders = stockOrders;
         this.building = building;
         this.type = type;
@@ -66,22 +71,6 @@ public class Order {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Date getDateRestock() {
-        return dateRestock;
-    }
-
-    public void setDateRestock(Date dateRestock) {
-        this.dateRestock = dateRestock;
     }
 
     public Set<StockOrder> getStockOrders() {
@@ -110,5 +99,25 @@ public class Order {
 
     public void setType(OrderType type) {
         this.type = type;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
