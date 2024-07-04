@@ -1,13 +1,7 @@
 package com.akthon.SunSka.service;
 
-import com.akthon.SunSka.DTO.OrderCreateDTO;
-import com.akthon.SunSka.DTO.OrderUpdateDTO;
-import com.akthon.SunSka.DTO.OrderWithTypeCreateDTO;
-import com.akthon.SunSka.DTO.ProductSalesDTO;
-import com.akthon.SunSka.model.Building;
-import com.akthon.SunSka.model.Order;
-import com.akthon.SunSka.model.Stock;
-import com.akthon.SunSka.model.StockOrder;
+import com.akthon.SunSka.DTO.*;
+import com.akthon.SunSka.model.*;
 import com.akthon.SunSka.repository.BuildingRepository;
 import com.akthon.SunSka.repository.OrderRepository;
 import com.akthon.SunSka.repository.StockRepository;
@@ -16,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -43,37 +39,57 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(OrderCreateDTO orderData) {
-        return createOrderInternal(orderData.buildingId, orderData.stockId, Order.OrderType.ORDER, orderData.quantity);
+        return createOrderInternal(orderData.buildingId, orderData.stockQtts, Order.OrderType.ORDER);
     }
 
     @Transactional
     public Order createOrderWithType(OrderWithTypeCreateDTO orderData) {
-        return createOrderInternal(orderData.buildingId, orderData.stockId, orderData.type, orderData.quantity);
+        return createOrderInternal(orderData.buildingId, orderData.stockQtts, orderData.type);
     }
 
-    private Order createOrderInternal(Long buildingId, Long stockId, Order.OrderType type, int quantity) {
+    private Order createOrderInternal(Long buildingId, List<long[]> stockQtts, Order.OrderType type) {
         Optional<Building> building = buildingRepository.findById(buildingId);
         if (building.isEmpty()) {
             throw new EntityNotFoundException("Building not found");
         }
-        Optional<Stock> stock = stockRepository.findById(stockId);
-        if (stock.isEmpty()) {
-            throw new EntityNotFoundException("Stock not found");
+
+        // Extract stock IDs from stockQtts
+        List<Long> stockIds = stockQtts.stream()
+                .map(stockQtt -> stockQtt[0])
+                .collect(Collectors.toList());
+
+        List<Stock> stocks = stockRepository.findAllById(stockIds);
+        if (stocks.size() != stockIds.size()) {
+            throw new EntityNotFoundException("One or more stocks not found");
         }
 
         Order order = new Order();
-
         order.setBuilding(building.get());
         order.setStatus(Order.OrderStatus.CREATED);
         order.setType(type);
         order.setCreatedAt(new Date());
         order.setUpdatedAt(new Date());
 
-        StockOrder stockOrder = new StockOrder();
-        stockOrder.setOrder(order);
-        stockOrder.setStock(stock.get());
-        stockOrder.setQuantity(quantity);
-        order.getStockOrders().add(stockOrder);
+        for (long[] stockQtt : stockQtts) {
+            Long stockId = stockQtt[0];
+            Integer quantity = (int) stockQtt[1];
+
+            Optional<Stock> stock = stocks.stream()
+                    .filter(s -> s.getId().equals(stockId))
+                    .findFirst();
+
+            if (stock.isPresent()) {
+                StockOrder stockOrder = new StockOrder();
+                stockOrder.setOrder(order);
+                stockOrder.setStock(stock.get());
+                stockOrder.setQuantity(quantity);
+                order.getStockOrders().add(stockOrder);
+            } else {
+                throw new EntityNotFoundException("Stock not found for ID: " + stockId);
+            }
+        }
+
+        this.updateStockForOrder(order, type);
 
         return orderRepository.save(order);
     }
@@ -124,5 +140,48 @@ public class OrderService {
         productSalesDTO.setSales(saleDetails);
 
         return productSalesDTO;
+    }
+
+    public void updateStockForOrder(Order order, Order.OrderType orderType) {
+        if (orderType == Order.OrderType.SALE) {
+            order.getStockOrders().forEach(stockOrder -> {
+                Stock stock = stockOrder.getStock();
+                stock.setCurrentStock(stock.getCurrentStock() - stockOrder.getQuantity());
+                stockRepository.save(stock);
+            });
+        } else if (orderType == Order.OrderType.RESTOCK) {
+            order.getStockOrders().forEach(stockOrder -> {
+                Stock stock = stockOrder.getStock();
+                stock.setCurrentStock(stock.getCurrentStock() + stockOrder.getQuantity());
+                stockRepository.save(stock);
+            });
+        } else if (orderType == Order.OrderType.ORDER) {
+            // TODO faire + qtt bar et - qtt magasin
+            order.getStockOrders().forEach(stockOrder -> {
+                Stock stock = stockOrder.getStock();
+                stock.setCurrentStock(stock.getCurrentStock() + stockOrder.getQuantity());
+                stockRepository.save(stock);
+            });
+
+            //get current Year basing on the createdAt of the order
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(order.getCreatedAt());
+            int year = calendar.get(Calendar.YEAR);
+
+            ShopResponseDTO shopResponse = this.stockRepository.findShopByYear(year);
+            Optional<Building> shop = this.buildingRepository.findById(shopResponse.buildingId);
+
+            //foreach stock of the order get the product and compare if the stock of the building have the same product
+            order.getStockOrders().forEach(stockOrder -> {
+                Product product = stockOrder.getStock().getProduct();
+                Optional<Stock> stockShop = shop.get().getStocks().stream()
+                        .filter(s -> s.getProduct().getId().equals(product.getId()))
+                        .findFirst();
+                if (stockShop.isPresent()) {
+                    stockShop.get().setCurrentStock(stockShop.get().getCurrentStock() - stockOrder.getQuantity());
+                    stockRepository.save(stockShop.get());
+                }
+            });
+        }
     }
 }

@@ -36,7 +36,7 @@ public class OrderController {
         return orderService.createOrder(orderData);
     }
 
-    @PostMapping("{type}")
+    @PostMapping("/{type}")
     public Order createOrderByType(@RequestBody OrderWithTypeCreateDTO orderData) {
         // TODO  faire la gestion du stockOrder
         return orderService.createOrderWithType(orderData);

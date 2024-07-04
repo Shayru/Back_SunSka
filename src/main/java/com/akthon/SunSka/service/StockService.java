@@ -1,6 +1,6 @@
 package com.akthon.SunSka.service;
 
-import com.akthon.SunSka.DTO.ProductStockDTO;
+import com.akthon.SunSka.DTO.ShopResponseDTO;
 import com.akthon.SunSka.DTO.StockCreateDTO;
 import com.akthon.SunSka.DTO.StockResponseDTO;
 import com.akthon.SunSka.model.*;
@@ -9,10 +9,8 @@ import com.akthon.SunSka.repository.EventRepository;
 import com.akthon.SunSka.repository.ProductRepository;
 import com.akthon.SunSka.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,6 +88,10 @@ public class StockService {
 
     public List<Long> findStockInAlertForBarAndYear(Long idBar, int year) {
         return stockRepository.findStockInAlertForBarAndYear(idBar, year);
+    }
+
+    public ShopResponseDTO findShopByYear(int year) {
+        return stockRepository.findShopByYear(year);
     }
 
 //    public List<ProductStockDTO> getBarShopStocks(Long idBar) {

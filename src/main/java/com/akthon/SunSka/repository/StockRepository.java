@@ -1,5 +1,6 @@
 package com.akthon.SunSka.repository;
 
+import com.akthon.SunSka.DTO.ShopResponseDTO;
 import com.akthon.SunSka.DTO.StockResponseDTO;
 import com.akthon.SunSka.model.Stock;
 import com.akthon.SunSka.model.User;
@@ -31,4 +32,10 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
             "AND s.event.year = :year " +
             "AND s.building.id = :idBar")
     List<Long> findStockInAlertForBarAndYear(@Param("idBar") Long idBar, @Param("year") int year);
+
+    @Query("SELECT NEW com.akthon.SunSka.DTO.ShopResponseDTO(s.building.id, s.building.name) " +
+            "FROM Stock s " +
+            "WHERE s.event.year = :year " +
+            "AND s.building.type =  com.akthon.SunSka.model.Building.BuildingType.SHOP")
+    ShopResponseDTO findShopByYear(@Param("year") int year);
 }
