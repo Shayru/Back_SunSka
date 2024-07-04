@@ -1,12 +1,14 @@
 package com.akthon.SunSka.service;
 
 import com.akthon.SunSka.DTO.*;
+import com.akthon.SunSka.enums.RoleEnum;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.User;
 import com.akthon.SunSka.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -71,10 +73,21 @@ public class UserService {
     }
 
     public LoginResponseDTO login(LoginDTO loginData) {
+        System.out.println("test");
+        System.out.println(loginData);
         Optional<User> user = userRepository.findByLogin(loginData.login);
         if (user.isPresent() && passwordHasherService.verifyPassword(loginData.password, user.get().getPassword())) {
             User u = user.get();
-            LoginResponseDTO responseDTO = new LoginResponseDTO(u.getId(), u.getName(), u.getLogin());
+
+            Boolean globalAdmin = this.isUserGlobalAdmin(u.getId());
+            RoleEnum role = globalAdmin ? RoleEnum.GLOBALADMIN : u.getAdmin() ? RoleEnum.ADMIN : RoleEnum.USER;
+
+            Building building = u.getBuildings().size() > 0 ? u.getBuildings().iterator().next() : null;
+
+            BuildingInfoDTO buildingInfo = new BuildingInfoDTO(building.getId(), building.getName(), building.getType());
+
+
+            LoginResponseDTO responseDTO = new LoginResponseDTO(u.getId(), u.getName(), u.getLogin(), role, buildingInfo);
             return responseDTO;
         }
         return new LoginResponseDTO();

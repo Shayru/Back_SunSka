@@ -52,7 +52,6 @@ public class OrderService {
     }
 
     private Order createOrderInternal(Long buildingId, Long stockId, Order.OrderType type, int quantity) {
-        Order order = new Order();
         Optional<Building> building = buildingRepository.findById(buildingId);
         if (building.isEmpty()) {
             throw new EntityNotFoundException("Building not found");
@@ -61,6 +60,8 @@ public class OrderService {
         if (stock.isEmpty()) {
             throw new EntityNotFoundException("Stock not found");
         }
+
+        Order order = new Order();
 
         order.setBuilding(building.get());
         order.setStatus(Order.OrderStatus.CREATED);
