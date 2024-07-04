@@ -14,4 +14,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "FROM Order o " +
             "WHERE o.building.id = :barId")
     List<Long> findByBar(@Param("barId") Long barId);
+
+    List<Order> findByBuildingIdAndType(Long buildingId, Order.OrderType type);
+
 }

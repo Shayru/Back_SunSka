@@ -87,4 +87,8 @@ public class OrderService {
         Optional<Building> bar = this.buildingRepository.findById(barId);
         return bar.map(building -> orderRepository.findByBar(building.getId())).orElse(null);
     }
+
+    public List<Order> getOrdersByBuildingAndType(Long buildingId, Order.OrderType type) {
+        return orderRepository.findByBuildingIdAndType(buildingId, type);
+    }
 }

@@ -54,6 +54,7 @@ public class OrderController {
     }
 
 
+
     //TODO Faire la validation de la commande et la modif dans le stock
 
     //TODO Recup les commandes de tous les bar
@@ -61,6 +62,10 @@ public class OrderController {
 
     //PARTIE HISTORIQUE
     //TODO get toutes les ventes d'un bar
+    @GetMapping("/building/{buildingId}")
+    public List<Order> getOrdersByBuildingAndType(@PathVariable Long buildingId) {
+        return orderService.getOrdersByBuildingAndType(buildingId, Order.OrderType.SALE);
+    }
     //TODO get toutes les ventes d'un produit
     //TODO get toutes les ventes d'un type de produit
     //....
