@@ -41,7 +41,7 @@ public class User {
             String password,
             Boolean admin,
             String name,
-            Set<Building> buildings,
+            Set<Building> buildings
     ) {
         this.login = login;
         this.password = password;
