@@ -1,6 +1,7 @@
 package com.akthon.SunSka.service;
 
 import com.akthon.SunSka.DTO.StockCreateDTO;
+import com.akthon.SunSka.DTO.StockResponseDTO;
 import com.akthon.SunSka.model.*;
 import com.akthon.SunSka.repository.BuildingRepository;
 import com.akthon.SunSka.repository.EventRepository;
@@ -76,6 +77,9 @@ public class StockService {
         return stockRepository.findById(id);
     }
 
+    public List<StockResponseDTO> findStockForBuildingByYear(int year, long buildingId) {
+        return stockRepository.findStockForBuildingByYear(year, buildingId);
+    }
 
     public List<Long> findStockInAlertForYear(int year) {
         return stockRepository.findStockInAlertForYear(year);

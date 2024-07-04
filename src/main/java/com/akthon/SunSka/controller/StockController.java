@@ -1,6 +1,7 @@
 package com.akthon.SunSka.controller;
 
 import com.akthon.SunSka.DTO.StockCreateDTO;
+import com.akthon.SunSka.DTO.StockResponseDTO;
 import com.akthon.SunSka.model.Stock;
 import com.akthon.SunSka.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,17 @@ public class StockController {
         return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{year}")
+    @GetMapping("/{year}/{building}")
+    public List<StockResponseDTO> getStockForBuildingByYear(@PathVariable int year, @PathVariable Long building) {
+        return stockService.findStockForBuildingByYear(year, building);
+    }
+
+    @GetMapping("/alert/{year}")
     public List<Long> getStockInAlertByYear(@PathVariable int year) {
         return stockService.findStockInAlertForYear(year);
     }
 
-    @GetMapping("/{year}/{bar}")
+    @GetMapping("/alert/{year}/{bar}")
     public List<Long> getStockInAlertByYear(@PathVariable int year, @PathVariable Long bar) {
         return stockService.findStockInAlertForBarAndYear(bar, year);
     }
