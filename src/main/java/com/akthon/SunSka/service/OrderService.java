@@ -98,6 +98,13 @@ public class OrderService {
     public ProductSalesDTO getSalesByProductId(Long productId) {
         List<Order> orders = orderRepository.findAll();
 
+        String productName = orders.stream()
+                .flatMap(order -> order.getStockOrders().stream())
+                .filter(stockOrder -> stockOrder.getStock().getProduct().getId().equals(productId))
+                .map(stockOrder -> stockOrder.getStock().getProduct().getName())
+                .findFirst()
+                .orElse(null);
+
         List<ProductSalesDTO.SaleDetail> saleDetails = orders.stream()
                 .filter(order -> order.getType() == Order.OrderType.SALE)
                 .flatMap(order -> order.getStockOrders().stream()
@@ -111,9 +118,9 @@ public class OrderService {
                         }))
                 .collect(Collectors.toList());
 
-        // Construct ProductSalesDTO
         ProductSalesDTO productSalesDTO = new ProductSalesDTO();
         productSalesDTO.setProductId(productId);
+        productSalesDTO.setProductName(productName);
         productSalesDTO.setSales(saleDetails);
 
         return productSalesDTO;

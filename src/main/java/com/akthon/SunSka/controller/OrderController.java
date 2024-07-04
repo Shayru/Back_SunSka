@@ -77,7 +77,7 @@ public class OrderController {
     }
 
     //TODO get toutes les ventes d'un type de produit
-    //....
+
 
 
 }
