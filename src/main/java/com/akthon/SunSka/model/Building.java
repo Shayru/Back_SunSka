@@ -15,12 +15,17 @@ import java.util.Set;
         property = "id")
 public class Building {
 
+    public enum BuildingType {
+        BAR,
+        SHOP
+    }
+
     private @Id
     @GeneratedValue Long id;
 
     private String name;
 
-    private String type;
+    private BuildingType type;
 
     @OneToMany(mappedBy = "building")
     private Set<Stock> stocks;
@@ -38,7 +43,7 @@ public class Building {
     public Building(
             Long id,
             String name,
-            String type,
+            BuildingType type,
             Set<Stock> stocks,
             Set<User> users,
             Set<Order> orders
@@ -68,14 +73,6 @@ public class Building {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public Set<Stock> getStocks() {
         return stocks;
     }
@@ -98,5 +95,13 @@ public class Building {
 
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    public BuildingType getType() {
+        return type;
+    }
+
+    public void setType(BuildingType type) {
+        this.type = type;
     }
 }

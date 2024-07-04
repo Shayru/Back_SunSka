@@ -1,7 +1,9 @@
 package com.akthon.SunSka.DTO;
 
+import com.akthon.SunSka.model.Building;
+
 public class BuildingUpdateDTO {
 
     public String name;
-    public String type;
+    public Building.BuildingType type;
 }
