@@ -37,9 +37,9 @@ public class OrderController {
     }
 
     @PostMapping("/{type}")
-    public Order createOrderByType(@RequestBody OrderWithTypeCreateDTO orderData) {
+    public Order createOrderByType(@PathVariable Order.OrderType type, @RequestBody OrderWithTypeCreateDTO orderData) {
         // TODO  faire la gestion du stockOrder
-        return orderService.createOrderWithType(orderData);
+        return orderService.createOrderWithType(type, orderData);
     }
 
     @PatchMapping("/{id}")

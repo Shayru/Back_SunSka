@@ -43,8 +43,8 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrderWithType(OrderWithTypeCreateDTO orderData) {
-        return createOrderInternal(orderData.buildingId, orderData.stockQtts, orderData.type);
+    public Order createOrderWithType(Order.OrderType type, OrderWithTypeCreateDTO orderData) {
+        return createOrderInternal(orderData.buildingId, orderData.stockQtts, type);
     }
 
     private Order createOrderInternal(Long buildingId, List<long[]> stockQtts, Order.OrderType type) {
