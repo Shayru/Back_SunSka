@@ -84,6 +84,10 @@ public class User {
         return this.name;
     }
 
+    public Boolean getIsArchived() {
+        return this.isArchived;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

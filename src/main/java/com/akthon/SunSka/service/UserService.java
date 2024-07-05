@@ -8,7 +8,6 @@ import com.akthon.SunSka.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,8 +20,8 @@ public class UserService {
     @Autowired
     private PasswordHasherService passwordHasherService;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserInfoDTO> getAllUsers() {
+        return userRepository.findAllUsersInfo();
     }
 
     public Optional<User> getUserById(Long id) {
@@ -73,10 +72,8 @@ public class UserService {
     }
 
     public LoginResponseDTO login(LoginDTO loginData) {
-        System.out.println("test");
-        System.out.println(loginData);
         Optional<User> user = userRepository.findByLogin(loginData.login);
-        if (user.isPresent() && passwordHasherService.verifyPassword(loginData.password, user.get().getPassword())) {
+        if (user.isPresent() && !user.get().getIsArchived() && passwordHasherService.verifyPassword(loginData.password, user.get().getPassword())) {
             User u = user.get();
 
             Boolean globalAdmin = this.isUserGlobalAdmin(u.getId());

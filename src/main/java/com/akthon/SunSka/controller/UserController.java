@@ -1,7 +1,6 @@
 package com.akthon.SunSka.controller;
 
 import com.akthon.SunSka.DTO.*;
-import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.User;
 import com.akthon.SunSka.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserInfoDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
@@ -51,7 +50,6 @@ public class UserController {
 
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody LoginDTO loginData) {
-        System.out.println("test");
         return userService.login(loginData);
     }
 
