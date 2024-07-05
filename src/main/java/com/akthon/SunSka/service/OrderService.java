@@ -132,6 +132,18 @@ public class OrderService {
                         }))
                 .collect(Collectors.toList());
 
+        List<ProductSalesDTO.SaleDetail> saleDetailsFinal = new ArrayList<>();
+
+        saleDetails.forEach(saleDetail -> {
+            if(saleDetailsFinal.stream().filter(sd -> sd.barName.equals(saleDetail.barName)).count() == 0) {
+                saleDetailsFinal.add(saleDetail);
+            } else {
+                saleDetailsFinal.stream().filter(sd -> sd.barName.equals(saleDetail.barName)).forEach(sd -> {
+                    sd.setQuantity(sd.getQuantity() + saleDetail.getQuantity());
+                });
+            }
+        });
+
         ProductSalesDTO productSalesDTO = new ProductSalesDTO();
         productSalesDTO.setProductId(productId);
         productSalesDTO.setProductName(productName);
