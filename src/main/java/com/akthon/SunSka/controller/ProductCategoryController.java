@@ -1,11 +1,13 @@
 package com.akthon.SunSka.controller;
 
+import com.akthon.SunSka.DTO.ProductCreateDTO;
 import com.akthon.SunSka.model.ProductCategory;
 import com.akthon.SunSka.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,14 +17,19 @@ public class ProductCategoryController {
     @Autowired
     private ProductCategoryService productCategoryService;
 
-    @PostMapping
-    public ProductCategory createProductCategory(@RequestBody ProductCategory productCategory) {
-        return productCategoryService.createProductCategory(productCategory);
+    @GetMapping
+    public List<ProductCategory> getAll() {
+        return productCategoryService.getAll();
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ProductCategory> updateProductCategory(@PathVariable Long id, @RequestBody ProductCategory productCategory) {
-        Optional<ProductCategory> updatedProductCategory = productCategoryService.updateProductCategory(id, productCategory);
+    @PostMapping
+    public ProductCategory createProductCategory(@RequestBody ProductCreateDTO categoryData) {
+        return productCategoryService.createProductCategory(categoryData.name);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductCategory> updateProductCategory(@PathVariable Long id, @RequestBody ProductCreateDTO categoryData) {
+        Optional<ProductCategory> updatedProductCategory = productCategoryService.updateProductCategory(id, categoryData.name);
         return updatedProductCategory.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

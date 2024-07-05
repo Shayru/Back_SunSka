@@ -8,5 +8,4 @@ public class ProductUpdateDTO {
     public String name;
     public Integer capacity;
     public String unit;
-    public String unitCase;
 }

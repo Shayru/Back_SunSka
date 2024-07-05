@@ -23,13 +23,10 @@ public class ProductCategory {
     }
 
     public ProductCategory(
-            Long id,
-            String name,
-            Set<Product> products
+            String name
     ) {
-        this.id = id;
         this.name = name;
-        this.products = products;
+        this.products = Set.of();
     }
 
     public Long getId() {

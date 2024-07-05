@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
-public class Product {
+public class  Product {
 
     private @Id
     @GeneratedValue Long id;
@@ -22,8 +22,7 @@ public class Product {
 
     private String unit;
 
-    @Column()
-    private String unitCase;
+    private Boolean isActif;
 
     @OneToMany(mappedBy = "product")
     private Set<Stock> stocks;
@@ -44,19 +43,16 @@ public class Product {
             String name,
             Integer capacity,
             String unit,
-            String unitCase,
-            Set<Stock> stocks,
-            ProductCategory category,
-            Partner partner
+            ProductCategory category
     ) {
 
         this.name = name;
         this.capacity = capacity;
         this.unit = unit;
-        this.unitCase = unitCase;
-        this.stocks = stocks;
+        this.stocks = Set.of();
         this.category = category;
-        this.partner = partner;
+        this.partner = null;
+        this.isActif = true;
     }
 
     public Long getId() {
@@ -91,14 +87,6 @@ public class Product {
         this.unit = unit;
     }
 
-    public String getUnitCase() {
-        return unitCase;
-    }
-
-    public void setUnitCase(String unitCase) {
-        this.unitCase = unitCase;
-    }
-
     public Set<Stock> getStocks() {
         return stocks;
     }
@@ -121,5 +109,13 @@ public class Product {
 
     public void setPartner(Partner partner) {
         this.partner = partner;
+    }
+
+    public Boolean isActif() {
+        return isActif;
+    }
+
+    public void changeActif() {
+        this.isActif = !this.isActif;
     }
 }

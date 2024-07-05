@@ -1,6 +1,9 @@
 package com.akthon.SunSka.controller;
 
+import com.akthon.SunSka.DTO.ProductCreateDTO;
+import com.akthon.SunSka.DTO.ProductResponseDTO;
 import com.akthon.SunSka.DTO.ProductUpdateDTO;
+import com.akthon.SunSka.DTO.StockResponseDTO;
 import com.akthon.SunSka.model.Product;
 import com.akthon.SunSka.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,7 @@ public class ProductController {
     private ProductService productService;
 
     @RequestMapping
-    public List<Product> getAllProducts() {
+    public List<ProductResponseDTO> getAllProducts() {
         return productService.getAllProducts();
     }
 
@@ -29,15 +32,20 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public Product createProduct(@RequestBody ProductCreateDTO productData) {
+        return productService.createProduct(productData);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductUpdateDTO productUpdateDTO) {
         Optional<Product> updatedProduct = productService.updateProduct(id, productUpdateDTO);
         return updatedProduct.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}/active")
+    public Product changeActive(@PathVariable Long id) {
+        return productService.changeActive(id);
     }
 
     @DeleteMapping("/{id}")
