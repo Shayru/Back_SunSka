@@ -49,18 +49,24 @@ public class StockService {
         Stock s = new Stock();
 
         //On ne gère actuellement que l'année en cours
-        Event event = eventRepository.findAll().get(0);
-        s.setEvent(event);
+        Optional<Event> event = eventRepository.findById(Long.valueOf(1));
+        if(event.isEmpty()){
+            return null;
+        }
+        s.setEvent(event.get());
+
 
         Optional<Building> building = buildingRepository.findById(stock.buildingId);
-        if(building.isPresent()){
-            s.setBuilding(building.get());
+        if(building.isEmpty()){
+            return null;
         }
+        s.setBuilding(building.get());
 
         Optional<Product> product = productRepository.findById(stock.productId);
-        if(product.isPresent()){
-            s.setProduct(product.get());
+        if(product.isEmpty()){
+            return  null;
         }
+        s.setProduct(product.get());
 
         s.setInitialStock(stock.stock);
         s.setCurrentStock(stock.stock);
@@ -118,7 +124,10 @@ public class StockService {
         for (Stock stock : stockBar) {
             if(stock.getEvent().getYear() == year) {
                 StockAlertDTO stockAlertDTO = new StockAlertDTO();
+                stockAlertDTO.id = stock.getId();
                 stockAlertDTO.productName = stock.getProduct().getName();
+                stockAlertDTO.productCapacity = stock.getProduct().getCapacity();
+                stockAlertDTO.productUnit = stock.getProduct().getUnit();
                 stockAlertDTO.stockBar = stock.getCurrentStock();
                 if(stock.getCurrentStock() <= stock.getWarningAlert()) {
                     stockAlertDTO.isAlert = true;
