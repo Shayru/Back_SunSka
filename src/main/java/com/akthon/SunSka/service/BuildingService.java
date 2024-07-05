@@ -1,6 +1,7 @@
 package com.akthon.SunSka.service;
 
 import com.akthon.SunSka.DTO.BuildingAlertDTO;
+import com.akthon.SunSka.DTO.BuildingBarDTO;
 import com.akthon.SunSka.DTO.BuildingUpdateDTO;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.User;
@@ -87,4 +88,19 @@ public class BuildingService {
 
         return  buildingsAlerts;
     }
+
+    public List<BuildingBarDTO> getBarsByYear(int year) {
+        List<BuildingBarDTO> bars = new java.util.ArrayList<>(List.of());
+        //On ne récup que les bars
+        List<Building> buildings = buildingRepository.findByType(Building.BuildingType.BAR);
+
+        buildings.forEach(building ->  {
+            BuildingBarDTO bar = new BuildingBarDTO(building.getId(), building.getName());
+            bars.add(bar);
+        });
+
+        return  bars;
+    }
+
+
 }

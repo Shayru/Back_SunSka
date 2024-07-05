@@ -17,4 +17,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByBuildingIdAndType(Long buildingId, Order.OrderType type);
 
+    @Query("SELECT o " +
+            "FROM Order o " +
+            "WHERE o.building.type = com.akthon.SunSka.model.Building.BuildingType.BAR")
+    List<Order> findAllTypeOfOrderByBar();
+
+    @Query("SELECT o FROM Order o JOIN o.stockOrders so JOIN so.stock s WHERE o.type = :orderType AND s.product.category.id = :categoryId")
+    List<Order> findAllSalesByCategory(@Param("orderType") Order.OrderType orderType, @Param("categoryId") Long categoryId);
+
 }

@@ -40,6 +40,7 @@ public class ProductSalesDTO {
         private Long orderId;
         private Date saleDate;
         private Integer quantity;
+        public String barName;
 
         public Long getOrderId() {
             return orderId;
@@ -59,6 +60,7 @@ public class ProductSalesDTO {
         public void setQuantity(Integer quantity) {
             this.quantity = quantity;
         }
+
     }
 }
 

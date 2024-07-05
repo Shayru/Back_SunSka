@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Array;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -130,6 +127,7 @@ public class OrderService {
                             saleDetail.setOrderId(order.getId());
                             saleDetail.setSaleDate(order.getCreatedAt());
                             saleDetail.setQuantity(stockOrder.getQuantity());
+                            saleDetail.barName = stockOrder.getStock().getBuilding().getName();
                             return saleDetail;
                         }))
                 .collect(Collectors.toList());
@@ -182,5 +180,13 @@ public class OrderService {
                 }
             });
         }
+    }
+
+    public List<Order> getAllTypeOfOrderOfAllBar() {
+        return orderRepository.findAllTypeOfOrderByBar();
+    }
+
+    public List<Order> getSalesByCategory(Long categoryId) {
+        return orderRepository.findAllSalesByCategory(Order.OrderType.SALE, categoryId);
     }
 }

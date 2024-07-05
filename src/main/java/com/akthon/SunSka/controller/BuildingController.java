@@ -1,6 +1,7 @@
 package com.akthon.SunSka.controller;
 
 import com.akthon.SunSka.DTO.BuildingAlertDTO;
+import com.akthon.SunSka.DTO.BuildingBarDTO;
 import com.akthon.SunSka.DTO.BuildingUpdateDTO;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.service.BuildingService;
@@ -69,6 +70,11 @@ public class BuildingController {
     @GetMapping("/{year}/alerts")
     public List<BuildingAlertDTO> getBuildingsAndAlert(@PathVariable int year) {
         return buildingService.getBuildingsAndAlertForYear(year);
+    }
+
+    @GetMapping("/{year}/bars")
+    public List<BuildingBarDTO> getBarsByYear(@PathVariable int year) {
+        return buildingService.getBarsByYear(year);
     }
 
     //TODO Faire une demande pour vérif si un utilisateur est dans le building
