@@ -1,8 +1,10 @@
 package com.akthon.SunSka.controller;
 
 import com.akthon.SunSka.DTO.ShopResponseDTO;
+import com.akthon.SunSka.DTO.StockAlertUpdateDTO;
 import com.akthon.SunSka.DTO.StockCreateDTO;
 import com.akthon.SunSka.DTO.StockResponseDTO;
+import com.akthon.SunSka.model.ProductCategory;
 import com.akthon.SunSka.model.Stock;
 import com.akthon.SunSka.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,13 @@ public class StockController {
 
     @RequestMapping("/{id}")
     public ResponseEntity<Stock> getStockById(@PathVariable Long id) {
-        Optional<Stock> product = stockService.getStockById(id);
-        return product.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<Stock> stock = stockService.getStockById(id);
+        return stock.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/{id}/alert")
+    public ResponseEntity<Stock> updateStockAlert(@PathVariable Long id, @RequestBody StockAlertUpdateDTO alert) {
+        return stockService.updateAlert(id, alert.alert);
     }
 
     @GetMapping("/{year}/{building}")

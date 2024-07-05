@@ -9,6 +9,7 @@ import com.akthon.SunSka.repository.EventRepository;
 import com.akthon.SunSka.repository.ProductRepository;
 import com.akthon.SunSka.repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -92,6 +93,16 @@ public class StockService {
 
     public ShopResponseDTO findShopByYear(int year) {
         return stockRepository.findShopByYear(year);
+    }
+
+    public ResponseEntity<Stock> updateAlert(Long id, int alert) {
+        Optional<Stock> stock = stockRepository.findById(id);
+        if (stock.isPresent()) {
+            Stock s = stock.get();
+            s.setWarningAlert(alert);
+            return ResponseEntity.ok(stockRepository.save(s));
+        }
+        return ResponseEntity.notFound().build();
     }
 
 //    public List<ProductStockDTO> getBarShopStocks(Long idBar) {
