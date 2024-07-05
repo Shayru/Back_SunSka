@@ -147,7 +147,7 @@ public class OrderService {
         ProductSalesDTO productSalesDTO = new ProductSalesDTO();
         productSalesDTO.setProductId(productId);
         productSalesDTO.setProductName(productName);
-        productSalesDTO.setSales(saleDetails);
+        productSalesDTO.setSales(saleDetailsFinal);
 
         return productSalesDTO;
     }
