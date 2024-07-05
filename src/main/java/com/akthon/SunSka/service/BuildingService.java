@@ -1,8 +1,6 @@
 package com.akthon.SunSka.service;
 
-import com.akthon.SunSka.DTO.BuildingAlertDTO;
-import com.akthon.SunSka.DTO.BuildingBarDTO;
-import com.akthon.SunSka.DTO.BuildingUpdateDTO;
+import com.akthon.SunSka.DTO.*;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.User;
 import com.akthon.SunSka.repository.BuildingRepository;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BuildingService {
@@ -23,8 +22,11 @@ public class BuildingService {
     @Autowired
     private StockService stockService;
 
-    public List<Building> getAllBuildings() {
-        return buildingRepository.findAll();
+    public List<BuildingInfoDTO> getAllBuildings() {
+        List<Building> buildings = buildingRepository.findAll();
+        return buildings.stream()
+                .map(building -> new BuildingInfoDTO(building.getId(), building.getName(), building.getType()))
+                .collect(Collectors.toList());
     }
 
     public Optional<Building> getBuildingById(Long id) {
@@ -36,6 +38,7 @@ public class BuildingService {
     }
 
     public Optional<Building> updateBuilding(Long id, BuildingUpdateDTO buildingData) {
+        System.out.println(buildingData);
         return buildingRepository.findById(id).map(existingBuilding -> {
             existingBuilding.setName(buildingData.name);
             existingBuilding.setType(buildingData.type);
@@ -102,5 +105,27 @@ public class BuildingService {
         return  bars;
     }
 
+    public List<UserAssociatedToBuildingDTO> getUserAssociatedToBuilding(Long buildingId) {
+        List<User> users = userRepository.findByBuildingId(buildingId);
+        return users.stream()
+                .map(user -> new UserAssociatedToBuildingDTO(user.getId(), user.getName(), buildingId, user.getAdmin()))
+                .collect(Collectors.toList());
+    }
+
+    public Optional<Building> deleteUserFromBuilding(Long buildingId, Long userId) {
+        Optional<Building> buildingOptional = buildingRepository.findById(buildingId);
+        if (buildingOptional.isPresent()) {
+            Building building = buildingOptional.get();
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                building.getUsers().remove(user);
+                user.getBuildings().remove(building);
+                buildingRepository.save(building);
+                return Optional.of(building);
+            }
+        }
+        return Optional.empty();
+    }
 
 }

@@ -1,8 +1,6 @@
 package com.akthon.SunSka.controller;
 
-import com.akthon.SunSka.DTO.BuildingAlertDTO;
-import com.akthon.SunSka.DTO.BuildingBarDTO;
-import com.akthon.SunSka.DTO.BuildingUpdateDTO;
+import com.akthon.SunSka.DTO.*;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.service.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,7 @@ public class BuildingController {
     private BuildingService buildingService;
 
     @GetMapping
-    public List<Building> getAllBuildings() {
+    public List<BuildingInfoDTO> getAllBuildings() {
         return buildingService.getAllBuildings();
     }
 
@@ -41,7 +39,7 @@ public class BuildingController {
         return buildingService.createBuilding(building);
     }
 
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<Building> updateBuilding(@PathVariable Long id, @RequestBody BuildingUpdateDTO buildingData) {
         Optional<Building> updatedBuilding = buildingService.updateBuilding(id, buildingData);
         return updatedBuilding.map(ResponseEntity::ok)
@@ -75,6 +73,18 @@ public class BuildingController {
     @GetMapping("/{year}/bars")
     public List<BuildingBarDTO> getBarsByYear(@PathVariable int year) {
         return buildingService.getBarsByYear(year);
+    }
+
+    @GetMapping("/{buildingId}/users")
+    public List<UserAssociatedToBuildingDTO> getUserAssociatedToBuilding(@PathVariable Long buildingId) {
+        return buildingService.getUserAssociatedToBuilding(buildingId);
+    }
+
+    @DeleteMapping("/{buildingId}/users/{userId}")
+    public ResponseEntity<Building> deleteUserFromBuilding(@PathVariable Long buildingId, @PathVariable Long userId) {
+        Optional<Building> updatedBuilding = buildingService.deleteUserFromBuilding(buildingId, userId);
+        return updatedBuilding.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     //TODO Faire une demande pour vérif si un utilisateur est dans le building
