@@ -12,12 +12,12 @@ import java.util.List;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
-    @Query("SELECT NEW com.akthon.SunSka.DTO.StockResponseDTO(s.currentStock, s.product.name, s.product.capacity, s.product.unit, s.product.id, s.id, s.warningAlert) " +
+    @Query("SELECT NEW com.akthon.SunSka.DTO.StockResponseDTO(s.currentStock, s.product.name, s.product.capacity, s.product.unit, s.product.id, s.id, COALESCE(s.warningAlert, 0)) " +
             "FROM Stock s " +
             "INNER JOIN Product p " +
             "ON p.id = s.product.id " +
             "WHERE s.event.year = :year " +
-            "AND s.building.id = :idBar ")
+            "AND s.building.id = :idBar")
     List<StockResponseDTO> findStockForBuildingByYear(@Param("year") int year, @Param("idBar") Long idBar);
 
     @Query("SELECT s.id " +
