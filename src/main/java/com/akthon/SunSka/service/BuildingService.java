@@ -1,5 +1,6 @@
 package com.akthon.SunSka.service;
 
+import com.akthon.SunSka.DTO.BuildingAlertDTO;
 import com.akthon.SunSka.DTO.BuildingUpdateDTO;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.User;
@@ -18,6 +19,8 @@ public class BuildingService {
     private BuildingRepository buildingRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private StockService stockService;
 
     public List<Building> getAllBuildings() {
         return buildingRepository.findAll();
@@ -66,4 +69,22 @@ public class BuildingService {
         }).orElse(false);
     }
 
+    public List<BuildingAlertDTO> getBuildingsAndAlertForYear(int year) {
+        List<BuildingAlertDTO> buildingsAlerts = new java.util.ArrayList<>(List.of());
+        //On ne récup que les bars
+        List<Building> buildings = buildingRepository.findByType(Building.BuildingType.BAR);
+
+        buildings.forEach(building ->  {
+            List<Long> alerts = stockService.findStockInAlertForBarAndYear(building.getId(), year);
+            if(!alerts.isEmpty()) {
+                BuildingAlertDTO buildingAlert = new BuildingAlertDTO(building.getId(), building.getName(), true);
+                buildingsAlerts.add(buildingAlert);
+            } else{
+                BuildingAlertDTO buildingAlert = new BuildingAlertDTO(building.getId(), building.getName(), false);
+                buildingsAlerts.add(buildingAlert);
+            }
+        });
+
+        return  buildingsAlerts;
+    }
 }

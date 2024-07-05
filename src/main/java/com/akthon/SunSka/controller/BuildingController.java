@@ -1,5 +1,6 @@
 package com.akthon.SunSka.controller;
 
+import com.akthon.SunSka.DTO.BuildingAlertDTO;
 import com.akthon.SunSka.DTO.BuildingUpdateDTO;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.service.BuildingService;
@@ -26,6 +27,12 @@ public class BuildingController {
     public ResponseEntity<Building> getBuildingById(@PathVariable Long id) {
         Optional<Building> building = buildingService.getBuildingById(id);
         return building.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/name")
+    public String getBarName(@PathVariable Long id) {
+        Optional<Building> building = buildingService.getBuildingById(id);
+        return building.map(Building::getName).orElse(null);
     }
 
     @PostMapping
@@ -57,6 +64,11 @@ public class BuildingController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/{year}/alerts")
+    public List<BuildingAlertDTO> getBuildingsAndAlert(@PathVariable int year) {
+        return buildingService.getBuildingsAndAlertForYear(year);
     }
 
     //TODO Faire une demande pour vérif si un utilisateur est dans le building

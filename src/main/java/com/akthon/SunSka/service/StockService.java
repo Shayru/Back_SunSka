@@ -1,8 +1,6 @@
 package com.akthon.SunSka.service;
 
-import com.akthon.SunSka.DTO.ShopResponseDTO;
-import com.akthon.SunSka.DTO.StockCreateDTO;
-import com.akthon.SunSka.DTO.StockResponseDTO;
+import com.akthon.SunSka.DTO.*;
 import com.akthon.SunSka.model.*;
 import com.akthon.SunSka.repository.BuildingRepository;
 import com.akthon.SunSka.repository.EventRepository;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class StockService {
@@ -49,10 +48,9 @@ public class StockService {
     public Stock createStock(StockCreateDTO stock) {
         Stock s = new Stock();
 
-        Optional<Event> event = eventRepository.findById(stock.eventId);
-        if(event.isPresent()){
-            s.setEvent(event.get());
-        }
+        //On ne gère actuellement que l'année en cours
+        Event event = eventRepository.findAll().get(0);
+        s.setEvent(event);
 
         Optional<Building> building = buildingRepository.findById(stock.buildingId);
         if(building.isPresent()){
@@ -64,9 +62,9 @@ public class StockService {
             s.setProduct(product.get());
         }
 
-        s.setInitialStock(stock.initialStock);
-        s.setCurrentStock(stock.currentStock);
-        s.setWarningAlert(stock.warningAlert);
+        s.setInitialStock(stock.stock);
+        s.setCurrentStock(stock.stock);
+        s.setWarningAlert(10);
         return stockRepository.save(s);
     }
 
@@ -103,6 +101,50 @@ public class StockService {
             return ResponseEntity.ok(stockRepository.save(s));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    public List<StockAlertDTO> findStockForBuildingByYearAndAlerts(int year, Long buildingId) {
+        //Il n'y a qu'1 magasin donc on le récup
+        Building magasin = buildingRepository.findByType(Building.BuildingType.SHOP).get(0);
+
+        Optional<Building> building = buildingRepository.findById(buildingId);
+        if (building.isEmpty()) {
+            return null;
+        }
+
+        List<StockAlertDTO> stockAlerts = new java.util.ArrayList<>(List.of());
+
+        Set<Stock> stockBar = building.get().getStocks();
+        for (Stock stock : stockBar) {
+            if(stock.getEvent().getYear() == year) {
+                StockAlertDTO stockAlertDTO = new StockAlertDTO();
+                stockAlertDTO.productName = stock.getProduct().getName();
+                stockAlertDTO.stockBar = stock.getCurrentStock();
+                if(stock.getCurrentStock() <= stock.getWarningAlert()) {
+                    stockAlertDTO.isAlert = true;
+                } else {
+                    stockAlertDTO.isAlert = false;
+                }
+
+                magasin.getStocks().stream()
+                        .filter(stockMagasin ->
+                                stockMagasin.getProduct().getId().equals(stock.getProduct().getId()) &&
+                                        stockMagasin.getEvent().getYear() == year
+                        )
+                        .forEach(stockMagasin -> {
+                            stockAlertDTO.stockMagasin = stockMagasin.getCurrentStock();
+                        });
+
+                stockAlerts.add(stockAlertDTO);
+            }
+        }
+
+        return stockAlerts;
+
+
+
+
+
     }
 
 //    public List<ProductStockDTO> getBarShopStocks(Long idBar) {

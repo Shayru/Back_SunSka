@@ -1,9 +1,6 @@
 package com.akthon.SunSka.controller;
 
-import com.akthon.SunSka.DTO.ShopResponseDTO;
-import com.akthon.SunSka.DTO.StockAlertUpdateDTO;
-import com.akthon.SunSka.DTO.StockCreateDTO;
-import com.akthon.SunSka.DTO.StockResponseDTO;
+import com.akthon.SunSka.DTO.*;
 import com.akthon.SunSka.model.ProductCategory;
 import com.akthon.SunSka.model.Stock;
 import com.akthon.SunSka.service.StockService;
@@ -45,6 +42,11 @@ public class StockController {
     @GetMapping("/{year}/{building}")
     public List<StockResponseDTO> getStockForBuildingByYear(@PathVariable int year, @PathVariable Long building) {
         return stockService.findStockForBuildingByYear(year, building);
+    }
+
+    @GetMapping("/{year}/{building}/alert")
+    public List<StockAlertDTO> getStockForBuildingByYearAndIfAlert(@PathVariable int year, @PathVariable Long building) {
+        return stockService.findStockForBuildingByYearAndAlerts(year, building);
     }
 
     @GetMapping("/alert/{year}")
