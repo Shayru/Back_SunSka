@@ -1,5 +1,6 @@
 package com.akthon.SunSka.repository;
 
+import com.akthon.SunSka.DTO.CategorySaleDTO;
 import com.akthon.SunSka.model.Building;
 import com.akthon.SunSka.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,7 +23,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE o.building.type = com.akthon.SunSka.model.Building.BuildingType.BAR")
     List<Order> findAllTypeOfOrderByBar();
 
-    @Query("SELECT o FROM Order o JOIN o.stockOrders so JOIN so.stock s WHERE o.type = :orderType AND s.product.category.id = :categoryId")
-    List<Order> findAllSalesByCategory(@Param("orderType") Order.OrderType orderType, @Param("categoryId") Long categoryId);
+    @Query("SELECT NEW com.akthon.SunSka.DTO.CategorySaleDTO(s.product.name, SUM(so.quantity), MIN(o.id)) " +
+            "FROM Order o JOIN o.stockOrders so JOIN so.stock s " +
+            "WHERE o.type = :orderType AND s.product.category.id = :categoryId " +
+            "GROUP BY s.product.name")
+    List<CategorySaleDTO> findAllSalesByCategory(@Param("orderType") Order.OrderType orderType, @Param("categoryId") Long categoryId);
+
+
 
 }

@@ -79,7 +79,7 @@ public class OrderController {
 
     //TODO get toutes les ventes d'un type de produit
     @GetMapping("/sales/category/{categoryId}")
-    public List<Order> getSalesByCategory(@PathVariable Long categoryId) {
+    public List<CategorySaleDTO> getSalesByCategory(@PathVariable Long categoryId) {
         return orderService.getSalesByCategory(categoryId);
     }
 

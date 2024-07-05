@@ -198,7 +198,7 @@ public class OrderService {
         return orderRepository.findAllTypeOfOrderByBar();
     }
 
-    public List<Order> getSalesByCategory(Long categoryId) {
+    public List<CategorySaleDTO> getSalesByCategory(Long categoryId) {
         return orderRepository.findAllSalesByCategory(Order.OrderType.SALE, categoryId);
     }
 }
