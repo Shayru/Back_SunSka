@@ -28,6 +28,12 @@ public class OrderController {
         return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{id}/products")
+    public OrderProductDTO getOrderProducts(@PathVariable Long id) {
+        return orderService.getOrderProducts(id);
+    }
+
+
     @PostMapping
     public Order createOrder(@RequestBody OrderCreateDTO orderData) {
         return orderService.createOrder(orderData);
@@ -51,6 +57,11 @@ public class OrderController {
         return orderService.getOrdersWithStockByBar(barId);
     }
 
+    @PostMapping("/{id}")
+    public Order validateOrderWithChanges(@PathVariable Long id, @RequestBody OrderValidateDTO orderData) {
+        // TODO  faire la gestion du stockOrder
+        return orderService.validateOrder(id, orderData);
+    }
 
 
     //TODO Faire la validation de la commande et la modif dans le stock
@@ -59,6 +70,11 @@ public class OrderController {
     @GetMapping("/bars")
     public List<Order> getAllTypeOfOrderOfAllBar() {
         return orderService.getAllTypeOfOrderOfAllBar();
+    }
+
+    @GetMapping("/building/{buildingId}/details")
+    public List<OrderDetailDTO> getOrdersByBuilding(@PathVariable Long buildingId) {
+        return orderService.getOrdersByBuildingAndTypeDetail(buildingId, Order.OrderType.ORDER);
     }
 
 

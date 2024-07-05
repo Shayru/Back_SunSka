@@ -39,6 +39,21 @@ public class OrderService {
         return createOrderInternal(orderData.buildingId, orderData.stockQtts, Order.OrderType.ORDER);
     }
 
+    public Order validateOrder(Long id, OrderValidateDTO orderData) {
+        Optional<Order> existingOrder = orderRepository.findById(id);
+        if(existingOrder.isEmpty()){
+            return null;
+        }
+
+        Order order = existingOrder.get();
+        //TODO Ajouter le changement de statut de l'order
+
+        order.setStatus(Order.OrderStatus.DELIVERED);
+        order.setUpdatedAt(new Date());
+        return orderRepository.save(order);
+
+    }
+
     @Transactional
     public Order createOrderWithType(Order.OrderType type, OrderWithTypeCreateDTO orderData) {
         return createOrderInternal(orderData.buildingId, orderData.stockQtts, type);
@@ -102,6 +117,10 @@ public class OrderService {
     public List<Long> getOrdersWithStockByBar(Long barId) {
         Optional<Building> bar = this.buildingRepository.findById(barId);
         return bar.map(building -> orderRepository.findByBar(building.getId())).orElse(null);
+    }
+
+    public List<OrderDetailDTO> getOrdersByBuildingAndTypeDetail(Long buildingId, Order.OrderType type) {
+        return orderRepository.findByBuildingIdAndTypeDetail(buildingId,type );
     }
 
     public List<Order> getOrdersByBuildingAndType(Long buildingId, Order.OrderType type) {
@@ -176,14 +195,13 @@ public class OrderService {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(order.getCreatedAt());
             int year = calendar.get(Calendar.YEAR);
-
-            ShopResponseDTO shopResponse = this.stockRepository.findShopByYear(year);
-            Optional<Building> shop = this.buildingRepository.findById(shopResponse.buildingId);
+            List<Building> shop = this.buildingRepository.findByType(Building.BuildingType.SHOP);
+            Building CurrentShop =  shop.get(0);
 
             //foreach stock of the order get the product and compare if the stock of the building have the same product
             order.getStockOrders().forEach(stockOrder -> {
                 Product product = stockOrder.getStock().getProduct();
-                Optional<Stock> stockShop = shop.get().getStocks().stream()
+                Optional<Stock> stockShop = CurrentShop.getStocks().stream()
                         .filter(s -> s.getProduct().getId().equals(product.getId()))
                         .findFirst();
                 if (stockShop.isPresent()) {
@@ -200,5 +218,28 @@ public class OrderService {
 
     public List<CategorySaleDTO> getSalesByCategory(Long categoryId) {
         return orderRepository.findAllSalesByCategory(Order.OrderType.SALE, categoryId);
+    }
+
+    public OrderProductDTO getOrderProducts(Long id) {
+        Optional<Order> order = orderRepository.findById(id);
+        if(order.isEmpty()){
+            return null;
+        }
+
+        List<ProductBarDTO> productBarDTOList = new ArrayList<>();
+
+        order.get().getStockOrders().forEach(stockOrder -> {
+            ProductBarDTO productBarDTO = new ProductBarDTO();
+            productBarDTO.id = stockOrder.getStock().getProduct().getId();
+            productBarDTO.name = stockOrder.getStock().getProduct().getName();
+            productBarDTO.capacity = stockOrder.getStock().getProduct().getCapacity();
+            productBarDTO.unit = stockOrder.getStock().getProduct().getUnit();
+            productBarDTO.stock = stockOrder.getQuantity();
+            productBarDTOList.add(productBarDTO);
+        });
+
+
+        OrderProductDTO dto = new OrderProductDTO(id,productBarDTOList);
+        return dto;
     }
 }
